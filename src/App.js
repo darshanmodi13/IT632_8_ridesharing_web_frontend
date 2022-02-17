@@ -7,7 +7,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { GlobalContextProvider } from "./contexts/GlobalContext";
 
 //Pages
-import Home from "./components/Home";
+import Home from "./pages/Home/Home";
 
 function App() {
   return (

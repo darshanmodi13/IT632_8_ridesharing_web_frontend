@@ -17,7 +17,7 @@ const useStyles = makeStyles({
     top: "0%",
     left: "0%",
     transition: "all 0.3s",
-    zIndex: "99999",
+    zIndex: "9999",
   },
   "slider-down": {
     position: "absolute",

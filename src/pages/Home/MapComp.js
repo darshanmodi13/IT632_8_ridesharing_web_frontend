@@ -5,6 +5,8 @@ import RedIcon from "./CustomIcon";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import GpsFixedIcon from "@mui/icons-material/GpsFixed";
 import Location from "./Location";
+import MenuIcon from "@mui/icons-material/Menu";
+import Sidebar from "../../components/sidebar/Sidebar";
 
 //custom hooks
 import useGeoLocation from "../../hooks/useGeoLocation";
@@ -30,7 +32,7 @@ const useStyles = makeStyles({
   img: {
     height: "40px",
     width: "40px",
-    zIndex: 9999,
+    zIndex: 999,
     position: "absolute",
     top: "50%",
     left: "26%",
@@ -150,6 +152,33 @@ const useStyles = makeStyles({
     color: "#fff",
     cursor: "pointer",
   },
+  "nav-container": {
+    position: "absolute",
+    width: "30%",
+    background: "#fff",
+    top: "0",
+    left: "0",
+    height: "8%",
+    zIndex: 999,
+    "@media(max-width:1200px)": {
+      width: "100%",
+    },
+  },
+  menu: {
+    paddingTop: "10px",
+    paddingLeft: "10px",
+    cursor: "pointer",
+  },
+  "display-sidebar": {
+    display: "block",
+    width: "90%",
+    height: "100%",
+    position: "absolute",
+    zIndex: 9999,
+  },
+  "hide-sidebar": {
+    display: "none",
+  },
 });
 
 const MapComp = () => {
@@ -160,6 +189,7 @@ const MapComp = () => {
   const [startLocation, setStartLocation] = useState("Khadia");
   const [endLocation, setEndLocation] = useState("Khadia");
   const [placeHolderText, setPlaceHolderText] = useState("");
+  const [displaySidebar, setDisplaySiderbar] = useState(false);
   useEffect(() => {
     getAddress(location.coords);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -185,17 +215,32 @@ const MapComp = () => {
     setSliderOpen(true);
     setPlaceHolderText(text);
   };
+
+  const openSidebar = () => {
+    setDisplaySiderbar(true);
+  };
   return (
     <div className="classes['map-container']">
+      <div className={classes["nav-container"]}>
+        <MenuIcon
+          className={classes.menu}
+          style={{ fontSize: "35px" }}
+          onClick={openSidebar}
+        />
+      </div>
       <div>
         <GpsFixedIcon
           className={classes.img}
           onClick={getLocation}
           style={{ fontSize: "35px" }}
         />
-        {/* <img src={locationImg} alt="location" className={classes.img} /> */}
       </div>
-      <MapContainer center={location.coords} zoom={17} className={classes.map}>
+      <MapContainer
+        center={location.coords}
+        zoom={17}
+        className={classes.map}
+        zoomControl={false}
+      >
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
         <LocationMaker position={location.coords} />
       </MapContainer>
@@ -249,6 +294,13 @@ const MapComp = () => {
           openCloseSlider={setSliderOpen}
           text={placeHolderText}
         />
+      </div>
+      <div
+        className={
+          displaySidebar ? classes["display-sidebar"] : classes["hide-sidebar"]
+        }
+      >
+        <Sidebar display={displaySidebar} />
       </div>
     </div>
   );

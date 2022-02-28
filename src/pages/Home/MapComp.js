@@ -9,8 +9,6 @@ import Location from "./Location";
 //custom hooks
 import useGeoLocation from "../../hooks/useGeoLocation";
 import useGetAddress from "../../hooks/useGetAddress";
-//img
-import locationImg from "../../assets/img/location.jpg";
 
 //styles
 const useStyles = makeStyles({

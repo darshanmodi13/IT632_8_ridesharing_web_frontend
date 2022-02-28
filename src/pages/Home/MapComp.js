@@ -2,9 +2,15 @@ import React, { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import { makeStyles } from "@mui/styles";
 import RedIcon from "./CustomIcon";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import GpsFixedIcon from "@mui/icons-material/GpsFixed";
+import Location from "./Location";
 
+//custom hooks
+import useGeoLocation from "../../hooks/useGeoLocation";
+import useGetAddress from "../../hooks/useGetAddress";
 //img
-import location from "../../assets/img/location.jpg";
+import locationImg from "../../assets/img/location.jpg";
 
 //styles
 const useStyles = makeStyles({
@@ -29,8 +35,12 @@ const useStyles = makeStyles({
     zIndex: 9999,
     position: "absolute",
     top: "50%",
-    left: "25%",
+    left: "26%",
     cursor: "pointer",
+    background: "#fff",
+    color: "blue",
+    padding: "5px",
+
     "@media(max-width:1200px)": {
       left: "90%",
     },
@@ -70,6 +80,8 @@ const useStyles = makeStyles({
     border: "1px solid black",
     borderRadius: "20px",
     paddingTop: "5px",
+    paddingBottom: "5px",
+    cursor: "pointer",
   },
   "selected-type": {
     background: "black",
@@ -81,53 +93,164 @@ const useStyles = makeStyles({
     paddingLeft: "10px",
     borderRadius: "20px",
   },
+  "start-location": {
+    marginTop: "15%",
+    display: "flex",
+    justifyContent: "space-evenly",
+    borderBottom: "1px dotted black",
+    width: "90%",
+    margin: "auto",
+  },
+  "start-input": {
+    flexBasis: "85%",
+    border: "none",
+    outline: "none",
+  },
+  "red-marker-img": {
+    flexBasis: "10%",
+    width: "3px",
+    height: "10px",
+    color: "red",
+  },
+  "green-marker-img": {
+    flexBasis: "10%",
+    width: "3px",
+    height: "10px",
+    color: "green",
+  },
+  "end-location": {
+    marginTop: "5%",
+    display: "flex",
+    justifyContent: "space-evenly",
+    borderBottom: "1px dotted black",
+    width: "90%",
+    margin: "auto",
+  },
+  "display-slider": {
+    display: "block",
+  },
+  "hide-slider": {
+    display: "none",
+  },
+  "btn-container": {
+    position: "absolute",
+    top: "80%",
+    textAlign: "center",
+    width: "30%",
+    "@media(max-width:1200px)": {
+      width: "100%",
+    },
+  },
+  btn: {
+    marginTop: "2%",
+    width: "90%",
+    fontSize: "16px",
+    padding: "10px",
+    border: "1px solid transparent",
+    borderRadius: "20px",
+    background: "var(--background)",
+    color: "#fff",
+    cursor: "pointer",
+  },
 });
 
 const MapComp = () => {
-  const [position, setPosition] = useState([23.022505, 72.571365]);
   const classes = useStyles();
-
+  const [location, getLocation] = useGeoLocation();
+  const [address, getAddress] = useGetAddress();
+  const [isSliderOpen, setSliderOpen] = useState(false);
+  const [startLocation, setStartLocation] = useState("Khadia");
+  const [endLocation, setEndLocation] = useState("Khadia");
+  const [placeHolderText, setPlaceHolderText] = useState("");
   useEffect(() => {
-    getLocation();
+    getAddress(location.coords);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  function getLocation() {
-    navigator.geolocation.getCurrentPosition(onSuccess, onError);
-  }
+  const changeRideType = (e) => {
+    e.target.classList.add(classes["selected-type"]);
+    let previous = e.target.previousSibling;
+    let next = e.target.nextSibling;
 
-  const onSuccess = (pos) => {
-    setPosition(() => {
-      return [pos.coords.latitude, pos.coords.longitude];
-    });
+    if (previous) {
+      if (previous.classList[1] === classes["selected-type"]) {
+        previous.classList.remove(classes["selected-type"]);
+      }
+    } else {
+      if (next.classList[1] === classes["selected-type"]) {
+        next.classList.remove(classes["selected-type"]);
+      }
+    }
   };
 
-  const onError = (err) => {
-    console.log(err);
+  const openPopup = (text) => {
+    setSliderOpen(true);
+    setPlaceHolderText(text);
   };
   return (
     <div className="classes['map-container']">
       <div>
-        <img
-          src={location}
-          alt="location"
+        <GpsFixedIcon
           className={classes.img}
           onClick={getLocation}
+          style={{ fontSize: "35px" }}
         />
+        {/* <img src={locationImg} alt="location" className={classes.img} /> */}
       </div>
-      <MapContainer center={position} zoom={17} className={classes.map}>
+      <MapContainer center={location.coords} zoom={17} className={classes.map}>
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-        <LocationMaker position={position} />
+        <LocationMaker position={location.coords} />
       </MapContainer>
       <div className={classes["input-container"]}>
         <div className={classes["ride-type"]}>
           <span
             className={`${classes["book-ride"]} ${classes["selected-type"]}`}
+            onClick={changeRideType}
           >
             Book Ride
           </span>
-          <span className={`${classes["offer-ride"]}`}>Offer Ride</span>
+          <span className={`${classes["offer-ride"]}`} onClick={changeRideType}>
+            Offer Ride
+          </span>
         </div>
+        <div className={classes["start-location"]}>
+          <LocationOnIcon className={classes["green-marker-img"]} />
+          <input
+            type="text"
+            className={classes["start-input"]}
+            onClick={() => {
+              openPopup("Enter Pickup Location");
+            }}
+            value={startLocation}
+            readOnly
+          />
+        </div>
+        <div className={classes["end-location"]}>
+          <LocationOnIcon className={classes["red-marker-img"]} />
+          <input
+            type="text"
+            className={classes["start-input"]}
+            onClick={() => {
+              openPopup("Enter Drop Location");
+            }}
+            value={endLocation}
+            readOnly
+          />
+        </div>
+      </div>
+      <div className={classes["btn-container"]}>
+        <button className={classes.btn}>Next</button>
+      </div>
+      <div
+        className={
+          isSliderOpen ? classes["display-slider"] : classes["hide-slider"]
+        }
+      >
+        <Location
+          isOpen={isSliderOpen}
+          openCloseSlider={setSliderOpen}
+          text={placeHolderText}
+        />
       </div>
     </div>
   );
@@ -142,18 +265,12 @@ const LocationMaker = ({ position }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [position]);
   function setLocation() {
-    let coords = {
-      lat: position[0],
-      lng: position[1],
-    };
-    map.flyTo(coords, map.getZoom());
+    map.flyTo(position, map.getZoom());
   }
   return (
     <>
       <Marker position={position} icon={RedIcon}>
-        <Popup>
-          A pretty CSS3 popup. <br /> Easily customizable.
-        </Popup>
+        <Popup>Hello World</Popup>
       </Marker>
     </>
   );

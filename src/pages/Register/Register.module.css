@@ -1,0 +1,66 @@
+.App{
+    text-align: center;
+    background-color:aqua;
+}
+.form{
+    text-align:center;
+    background-color:whitesmoke;
+    display:contents;
+    box-sizing:border-box;
+    border: 1 px solid #ccc;
+    margin: 8px 0px;
+
+}
+
+.button{
+    width: 8%;
+    height: 10%;
+    background-color: #008000;
+    color: aliceblue;
+    cursor: pointer;
+    border-radius: 4px;
+    margin: 8px;
+    padding: 10px 10px;
+    
+
+}
+.input{
+    border: 2px solid black;
+    margin: 8px 0px;
+    box-sizing:initial;
+    border-radius: 3px;
+    padding: 12px 29px;
+    display: inline-block;
+    font-style:normal;
+    outline: none;
+
+    
+}
+.h3{
+    color:seagreen;
+    padding-top: 5px;
+    padding-bottom: 10px;
+    text-align: center;
+    margin-top: 0.83em;
+    margin-bottom: 0.83em;
+    margin-left: 0;
+    margin-right: 0;
+    font-weight: bold;
+}
+.h5{
+    color: black;
+    
+    text-align:inherit;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-weight:500;
+    
+}
+
+.error{
+    display: flex;
+    background-color: aliceblue;
+    width: fit-content;
+    height: 20px;
+    width: 20px;
+}

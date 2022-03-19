@@ -8,7 +8,6 @@ import { GlobalContextProvider } from "./contexts/GlobalContext";
 
 //Pages
 import Home from "./pages/Home/Home";
-import Signin from "./pages/Siginin/Signin";
 import Account from "./pages/Account/Account";
 import Login from "./pages/Login/Login";
 

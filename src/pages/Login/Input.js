@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@mui/styles";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import CloseIcon from "@mui/icons-material/Close";
 
 const useStyles = makeStyles({
   "login-container": {
@@ -63,11 +65,60 @@ const useStyles = makeStyles({
     marginTop: "2%",
     textAlign: "center",
   },
+  "error-container": {
+    marginTop: "2%",
+    width: "100%",
+    display: "flex",
+    justifyContent: "center",
+  },
+  err: {
+    width: "90%",
+    background: "red",
+    color: "#fff",
+    padding: "10px 10px",
+    fontSize: "0.8rem",
+  },
+  close: {
+    float: "right",
+    cursor: "pointer",
+  },
+  hide: {
+    display: "none",
+  },
+  show: {
+    display: "block",
+  },
 });
 
 const Input = () => {
   const classes = useStyles();
   const navigate = useNavigate();
+  const [input, setInput] = useState({
+    mobile: "",
+    password: "",
+  });
+  const [err, setErr] = useState("");
+
+  const changeInput = (e) => {
+    setInput((oldval) => {
+      return {
+        ...oldval,
+        [e.target.name]: e.target.value,
+      };
+    });
+  };
+  const submitForm = () => {
+    if (!input.mobile || input.mobile.length !== 10) {
+      setErr("Enter Valid Mobile Number");
+      return;
+    } else if (!input.password) {
+      setErr("Enter Password");
+      return;
+    }
+  };
+  const closeErr = () => {
+    setErr("");
+  };
   return (
     <>
       <div className={classes["login-container"]}>
@@ -83,6 +134,18 @@ const Input = () => {
           </div>
           <div className={classes["header-text"]}>Signin</div>
         </div>
+        {err ? (
+          <div className={`${classes["error-container"]}`}>
+            <div className={classes.err}>
+              {err}
+              <CloseIcon
+                className={classes.close}
+                style={{ fontSize: "0.8rem" }}
+                onClick={closeErr}
+              />
+            </div>
+          </div>
+        ) : null}
         <div className={classes["input-container"]}>
           <input
             type="text"
@@ -90,6 +153,9 @@ const Input = () => {
             title="Phone number with 7-9 and remaing 9 digit with 0-9"
             className={classes["input"]}
             placeholder="Enter Mobile Number"
+            value={input.mobile}
+            name="mobile"
+            onChange={changeInput}
           />
         </div>
         <div className={classes["input-container"]}>
@@ -97,13 +163,22 @@ const Input = () => {
             type="password"
             className={classes["input"]}
             placeholder="Enter Password"
+            value={input.password}
+            name="password"
+            onChange={changeInput}
           />
         </div>
         <div className={classes["btn-container"]}>
-          <button className={classes.btn}>Book Ride</button>
+          <button className={classes.btn} onClick={submitForm}>
+            Book Ride
+          </button>
         </div>
-        <div className={classes["register"]}>Don't Have Account ? Register</div>
-        <div className={classes["forgot-password"]}>Forgot Password</div>
+        <div className={classes["register"]}>
+          Don't Have Account ? <Link to="/register">Register</Link>
+        </div>
+        <div className={classes["forgot-password"]}>
+          <Link to="/forgot-password">Forgot Password</Link>
+        </div>
       </div>
     </>
   );

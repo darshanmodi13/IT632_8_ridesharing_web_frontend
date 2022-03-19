@@ -261,7 +261,6 @@ const MapComp = () => {
         lng: pos.coords.longitude,
       },
       (location) => {
-        console.log(location);
         setStartLocation(() => {
           return {
             location: location.place_name,

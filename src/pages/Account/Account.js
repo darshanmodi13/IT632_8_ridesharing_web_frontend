@@ -1,21 +1,37 @@
 import React from "react";
 
 import Image from "../../components/Image";
-//import MapComp from "./MapComp";
-import "./Accounts.css"
 import User from "./User"
 import Menu from "./Menu.js";
-import { Logout } from "@mui/icons-material";
 import Bottom from "./Bottom";
 import { makeStyles } from "@mui/styles";
 
+const useStyles = makeStyles({
+  "horizontal":{
+    display: "flex"
+},
+
+"heading":{
+    fontSize: "18px",
+    fontWeight: "700",
+    padding: "17px 20px 17px 20px",
+    borderBottom: "1px solid silver",
+    backgroundColor: "white"
+},
+
+"container":{
+    backgroundColor: "rgb(245, 244, 244)"
+}
+});
+
 
 const Home = () => {
+  const classes = useStyles()
   return (
     <>
-      <div className="container">
-        <div className="item-1">
-            <div id="heading">
+      <div className={classes["container"]}>
+        <div className={classes["item-1"]}>
+            <div className={classes["heading"]}>
                 Account
             </div>
             <div>

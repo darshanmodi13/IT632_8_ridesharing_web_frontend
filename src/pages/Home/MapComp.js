@@ -8,6 +8,7 @@ import { Map, Marker, Source, Layer } from "react-map-gl";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import TwoWheelerIcon from "@mui/icons-material/TwoWheeler";
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
+import { Link } from "react-router-dom";
 //custom hooks
 import useGeoLocation from "../../hooks/useGeoLocation";
 
@@ -341,7 +342,9 @@ const MapComp = () => {
             </div>
           ) : null}
           <div className={classes["login-container"]}>
-            <div className={classes.login}>Login</div>
+            <Link to="/login" className={classes.login}>
+              Login
+            </Link>
           </div>
         </Map>
         {currentComp === 1 ? (

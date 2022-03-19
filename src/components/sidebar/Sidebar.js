@@ -1,37 +1,26 @@
 import React from "react";
 import { makeStyles } from "@mui/styles";
+import Account from "../../pages/Account/Account";
 
 const useStyles = makeStyles({
   "sidebar-container": {
-    height: "100%",
-    width: "30%",
+    width: "95%",
     background: "#fff",
+    zIndex: 9999,
     "@media(max-width:1200px)": {
       width: "100%",
     },
   },
-  "display-sidebar": {
-    position: "absolute",
-    left: "25%",
-    zIndex: 9999,
-  },
-  "hide-slider": {
-    left: "-25%",
-  },
 });
 
-const Sidebar = ({ display }) => {
+const Sidebar = ({ display, closeSidebar }) => {
   const classes = useStyles();
   return (
-    <div className={classes["sidebar-container"]}>
-      <div
-        className={
-          display ? classes["display-sidebar"] : classes["hide-sidebar"]
-        }
-      >
-        sidebar
+    <>
+      <div className={classes["sidebar-container"]}>
+        <Account closeSidebar={closeSidebar} />
       </div>
-    </div>
+    </>
   );
 };
 

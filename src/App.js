@@ -8,13 +8,15 @@ import { GlobalContextProvider } from "./contexts/GlobalContext";
 
 //Pages
 import Home from "./pages/Home/Home";
+import Account from "./pages/Account/Account";
 
 function App() {
   return (
     <GlobalContextProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Home />} />
+          {/* <Route path="/" element={<Home />} /> */}
+          <Route path="/" element={<Account />} />
         </Routes>
       </BrowserRouter>
     </GlobalContextProvider>

@@ -3,6 +3,8 @@ import { makeStyles } from "@mui/styles";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import CloseIcon from "@mui/icons-material/Close";
+
 const useStyles = makeStyles({
   "login-container": {
     background: "#fff",
@@ -63,6 +65,29 @@ const useStyles = makeStyles({
     marginTop: "2%",
     textAlign: "center",
   },
+  "error-container": {
+    marginTop: "2%",
+    width: "100%",
+    display: "flex",
+    justifyContent: "center",
+  },
+  err: {
+    width: "90%",
+    background: "red",
+    color: "#fff",
+    padding: "10px 10px",
+    fontSize: "0.8rem",
+  },
+  close: {
+    float: "right",
+    cursor: "pointer",
+  },
+  hide: {
+    display: "none",
+  },
+  show: {
+    display: "block",
+  },
 });
 
 const Input = () => {
@@ -72,6 +97,7 @@ const Input = () => {
     mobile: "",
     password: "",
   });
+  const [err, setErr] = useState("");
 
   const changeInput = (e) => {
     setInput((oldval) => {
@@ -80,6 +106,18 @@ const Input = () => {
         [e.target.name]: e.target.value,
       };
     });
+  };
+  const submitForm = () => {
+    if (!input.mobile || input.mobile.length !== 10) {
+      setErr("Enter Valid Mobile Number");
+      return;
+    } else if (!input.password) {
+      setErr("Enter Password");
+      return;
+    }
+  };
+  const closeErr = () => {
+    setErr("");
   };
   return (
     <>
@@ -96,6 +134,18 @@ const Input = () => {
           </div>
           <div className={classes["header-text"]}>Signin</div>
         </div>
+        {err ? (
+          <div className={`${classes["error-container"]}`}>
+            <div className={classes.err}>
+              {err}
+              <CloseIcon
+                className={classes.close}
+                style={{ fontSize: "0.8rem" }}
+                onClick={closeErr}
+              />
+            </div>
+          </div>
+        ) : null}
         <div className={classes["input-container"]}>
           <input
             type="text"
@@ -119,7 +169,9 @@ const Input = () => {
           />
         </div>
         <div className={classes["btn-container"]}>
-          <button className={classes.btn}>Book Ride</button>
+          <button className={classes.btn} onClick={submitForm}>
+            Book Ride
+          </button>
         </div>
         <div className={classes["register"]}>
           Don't Have Account ? <Link to="/register">Register</Link>

@@ -12,7 +12,7 @@ const useStyles = makeStyles({
   },
 
   heading: {
-    fontSize: "18px",
+    fontSize: ".9rem",
     fontWeight: "700",
     padding: "17px 20px 17px 20px",
     borderBottom: "1px solid silver",

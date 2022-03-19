@@ -5,7 +5,7 @@ import { makeStyles } from "@mui/styles";
 const useStyles = makeStyles({
     "profile":{
         height: "90px",
-        fontSize: "18px",
+        fontSize: "1rem",
         fontWeight: "700",
         padding: "13px 20px 17px 22px",
         borderBottom: "1px solid silver",

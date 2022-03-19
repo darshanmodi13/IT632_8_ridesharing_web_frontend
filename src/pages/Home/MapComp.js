@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { makeStyles } from "@mui/styles";
 import GpsFixedIcon from "@mui/icons-material/GpsFixed";
 import Location from "./Location";
@@ -101,9 +101,6 @@ const useStyles = makeStyles({
   "btn-container": {
     textAlign: "center",
     width: "100%",
-    "@media(max-width:1200px)": {
-      width: "100%",
-    },
   },
   btn: {
     marginTop: "2%",
@@ -207,6 +204,16 @@ const MapComp = () => {
     fn: null,
   });
 
+  useEffect(() => {
+    setViewState((oldData) => {
+      return {
+        ...oldData,
+        latitude: startLocation.lat,
+        longitude: startLocation.lng,
+      };
+    });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [startLocation.location]);
   const changeRideType = (e) => {
     let previous = e.target.previousSibling;
     let next = e.target.nextSibling;
@@ -254,6 +261,7 @@ const MapComp = () => {
         lng: pos.coords.longitude,
       },
       (location) => {
+        console.log(location);
         setStartLocation(() => {
           return {
             location: location.place_name,

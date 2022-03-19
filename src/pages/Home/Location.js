@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@mui/styles";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+
+//api
+import mapApi from "../../apis/mapApis";
 
 const useStyles = makeStyles({
   "location-container": {
@@ -49,10 +52,40 @@ const useStyles = makeStyles({
     border: "2px solid black",
     padding: "10px",
   },
+  ul: {
+    listStyle: "none",
+    width: "100%",
+    marginLeft: "-21px",
+    textAlign: "left",
+    "@media(max-width:1200px)": {
+      marginLeft: "0",
+    },
+  },
+  li: {
+    width: "100%",
+    cursor: "pointer",
+    padding: "10px 20px",
+    border: "1px solid grey",
+    "@media(max-width:1200px)": {
+      width: "95%",
+    },
+  },
 });
-const Location = ({ openCloseSlider, isOpen, text }) => {
-  const classes = useStyles();
 
+const Location = ({ openCloseSlider, isOpen, text, data, setData }) => {
+  const classes = useStyles();
+  const [Locations, setLocations] = useState([]);
+
+  const locationClicked = (location) => {
+    data.fn(() => {
+      return {
+        location: location.place_name,
+        lng: parseFloat(location.center[0]),
+        lat: parseFloat(location.center[1]),
+      };
+    });
+    openCloseSlider(false);
+  };
   return (
     <div
       className={`${isOpen ? classes["slider-up"] : classes["slider-down"]} ${
@@ -74,7 +107,50 @@ const Location = ({ openCloseSlider, isOpen, text }) => {
         <div className={classes["header-text"]}>{text}</div>
       </div>
       <div className={classes["input-container"]}>
-        <input type="text" className={classes.input} placeholder={text} />
+        <input
+          type="text"
+          className={classes.input}
+          placeholder={text}
+          value={data.text || ""}
+          onChange={(e) => {
+            data.fn((oldData) => {
+              return {
+                ...oldData,
+                location: e.target.value,
+              };
+            });
+            setData((oldData) => {
+              return {
+                ...oldData,
+                text: e.target.value,
+              };
+            });
+            mapApi.getGeoLocation(
+              e.target.value,
+              (res) => {
+                setLocations(res);
+              },
+              () => {
+                console.log("-- Error in getting places --");
+              }
+            );
+          }}
+        />
+        <ul className={classes.ul}>
+          {Locations.map((location, index) => {
+            return (
+              <li
+                key={index}
+                className={classes.li}
+                onClick={() => {
+                  locationClicked(location);
+                }}
+              >
+                {location.place_name}
+              </li>
+            );
+          })}
+        </ul>
       </div>
     </div>
   );

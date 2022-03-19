@@ -1,16 +1,18 @@
-import React, { useEffect, useState } from "react";
-import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+import React, { useState } from "react";
 import { makeStyles } from "@mui/styles";
-import RedIcon from "./CustomIcon";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
 import GpsFixedIcon from "@mui/icons-material/GpsFixed";
 import Location from "./Location";
 import MenuIcon from "@mui/icons-material/Menu";
 import Sidebar from "../../components/sidebar/Sidebar";
-
+import { Map, Marker, Source, Layer } from "react-map-gl";
+import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
+import TwoWheelerIcon from "@mui/icons-material/TwoWheeler";
+import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 //custom hooks
 import useGeoLocation from "../../hooks/useGeoLocation";
-import useGetAddress from "../../hooks/useGetAddress";
+
+//api
+import mapApi from "../../apis/mapApis";
 
 //styles
 const useStyles = makeStyles({
@@ -20,123 +22,84 @@ const useStyles = makeStyles({
     position: "relative",
   },
   map: {
-    height: "60%",
-    width: "30%",
+    height: "60vh",
+    width: "30vw",
     position: "absolute",
     top: 0,
     left: 0,
     "@media(max-width:1200px)": {
-      width: "100%",
+      width: "100vw",
     },
   },
-  img: {
-    height: "40px",
-    width: "40px",
-    zIndex: 999,
+  "login-container": {
+    position: "relative",
+  },
+  login: {
+    color: "white",
     position: "absolute",
-    top: "50%",
-    left: "26%",
+    left: "75%",
+    marginTop: "5%",
+    fontSize: "1rem",
+    background: "var(--background)",
+    padding: "15px",
+    border: "1px solid green",
+    borderRadius: "20px",
     cursor: "pointer",
-    background: "#fff",
-    color: "blue",
-    padding: "5px",
-
     "@media(max-width:1200px)": {
-      left: "90%",
+      left: "80%",
     },
+  },
+  "ride-container": {
+    marginTop: "2%",
+    display: "flex",
+    width: "100%",
+    justifyContent: "space-evenly",
+    textAlign: "center",
+  },
+  "ride-style": {
+    flexBasis: "45%",
+    border: "1px solid black",
+    paddingTop: "5px",
+    paddingBottom: "5px",
+    borderRadius: "10px",
+    cursor: "pointer",
+  },
+  "selected-ride": {
+    color: "white",
+    background: "black",
+  },
+  "notselected-ride": {
+    color: "black",
+    background: "#fff",
   },
   "input-container": {
-    position: "absolute",
-    top: "60%",
-    width: "30%",
-    height: "25%",
-    textAlign: "center",
-    background: "#fff",
-    "@media (max-width:1200px)": {
-      width: "100%",
-    },
-  },
-  "ride-type": {
     marginTop: "2%",
-    width: "100%",
-    fontSize: "1rem",
-  },
-  "book-ride": {
-    float: "left",
-    marginLeft: "1%",
-    width: "47%",
-    textAlign: "center",
-    border: "1px solid black",
-    borderRadius: "20px",
-    paddingTop: "5px",
-    paddingBottom: "5px",
-    cursor: "pointer",
-  },
-  "offer-ride": {
-    float: "right",
-    marginRight: "1%",
-    width: "47%",
-    textAlign: "center",
-    border: "1px solid black",
-    borderRadius: "20px",
-    paddingTop: "5px",
-    paddingBottom: "5px",
-    cursor: "pointer",
-  },
-  "selected-type": {
-    background: "black",
-    color: "#fff",
+    padding: "5px",
   },
   input: {
     width: "95%",
     height: "25%",
     paddingLeft: "10px",
-    borderRadius: "20px",
-  },
-  "start-location": {
-    marginTop: "15%",
-    display: "flex",
-    justifyContent: "space-evenly",
+    paddingBottom: "5px",
     borderBottom: "1px dotted black",
-    width: "90%",
-    margin: "auto",
-  },
-  "start-input": {
-    flexBasis: "85%",
-    border: "none",
-    outline: "none",
-  },
-  "red-marker-img": {
-    flexBasis: "10%",
-    width: "3px",
-    height: "10px",
-    color: "red",
-  },
-  "green-marker-img": {
-    flexBasis: "10%",
-    width: "3px",
-    height: "10px",
-    color: "green",
-  },
-  "end-location": {
-    marginTop: "5%",
+    marginTop: "3%",
+    fontSize: "0.8rem",
     display: "flex",
-    justifyContent: "space-evenly",
-    borderBottom: "1px dotted black",
-    width: "90%",
-    margin: "auto",
+    cursor: "pointer",
   },
-  "display-slider": {
-    display: "block",
+  "gps-container": {
+    position: "relative",
+    top: "80%",
   },
-  "hide-slider": {
-    display: "none",
+  gps: {
+    position: "absolute",
+    left: "90%",
+    background: "#fff",
+    cursor: "pointer",
   },
   "btn-container": {
-    position: "absolute",
-    top: "80%",
     textAlign: "center",
-    width: "30%",
+    width: "100%",
     "@media(max-width:1200px)": {
       width: "100%",
     },
@@ -152,61 +115,111 @@ const useStyles = makeStyles({
     color: "#fff",
     cursor: "pointer",
   },
-  "nav-container": {
-    position: "absolute",
-    width: "30%",
-    background: "#fff",
-    top: "0",
-    left: "0",
-    height: "8%",
-    zIndex: 999,
-    "@media(max-width:1200px)": {
+  show: {
+    display: "block",
+  },
+  hide: {
+    display: "none",
+  },
+  "vehicle-logo": {
+    width: "100%",
+    textAlign: "center",
+  },
+  "vehicle-container": {
+    width: "100%",
+  },
+  vehicle: {
+    borderRadius: "10px",
+    padding: "10px",
+    display: "flex",
+    justifyContent: "space-evenly",
+    width: "90%",
+    background: "#bebebe",
+    marginTop: "2%",
+    transition: "0.3s all",
+    cursor: "pointer",
+    marginLeft: "5%",
+    "&:hover": {
       width: "100%",
+      marginLeft: "0%",
     },
   },
-  menu: {
-    paddingTop: "10px",
-    paddingLeft: "10px",
-    cursor: "pointer",
+  "vehicle-name": {
+    flexBasis: "50%",
   },
-  "display-sidebar": {
-    display: "block",
-    width: "90%",
-    height: "100%",
-    position: "absolute",
-    zIndex: 9999,
-  },
-  "hide-sidebar": {
-    display: "none",
+  distance: {
+    flexBasis: "30%",
   },
 });
 
+//token
+const token = process.env.REACT_APP_MAPBOX_TOKEN;
+
+const layerStyle = {
+  id: "route",
+  type: "line",
+  source: "route",
+  layout: {
+    "line-join": "round",
+    "line-cap": "round",
+  },
+  paint: {
+    "line-width": 4,
+    "line-color": "grey",
+  },
+};
+
 const MapComp = () => {
   const classes = useStyles();
-  const [location, getLocation] = useGeoLocation();
-  const [address, getAddress] = useGetAddress();
   const [isSliderOpen, setSliderOpen] = useState(false);
-  const [startLocation, setStartLocation] = useState("Khadia");
-  const [endLocation, setEndLocation] = useState("Khadia");
+  const [startLocation, setStartLocation] = useState({
+    location: "",
+    lat: 0,
+    lng: 0,
+  });
+  const [endLocation, setEndLocation] = useState({
+    location: "",
+    lat: 0,
+    lng: 0,
+  });
   const [placeHolderText, setPlaceHolderText] = useState("");
   const [displaySidebar, setDisplaySiderbar] = useState(false);
-  useEffect(() => {
-    getAddress(location.coords);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const [geojson, setGeojson] = useState({
+    type: "Feature",
+    geometry: {
+      type: "LineString",
+      coordinates: [],
+    },
+  });
+  const [viewState, setViewState] = useState({
+    latitude: 23.022505,
+    longitude: 72.571365,
+    zoom: 14,
+    dragPan: true,
+    bearing: 0,
+  });
+  const [distance, setDistance] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [currentComp, setCurrentComp] = useState(1);
+  const [location, setLocation] = useState({
+    text: null,
+    fn: null,
+  });
 
   const changeRideType = (e) => {
-    e.target.classList.add(classes["selected-type"]);
     let previous = e.target.previousSibling;
     let next = e.target.nextSibling;
-
+    e.target.classList.add(classes["selected-ride"]);
+    if (e.target.classList.contains(classes["notselected-ride"])) {
+      e.target.classList.remove(classes["notselected-ride"]);
+    }
     if (previous) {
-      if (previous.classList[1] === classes["selected-type"]) {
-        previous.classList.remove(classes["selected-type"]);
+      if (previous.classList.contains(classes["selected-ride"])) {
+        previous.classList.remove(classes["selected-ride"]);
       }
     } else {
-      if (next.classList[1] === classes["selected-type"]) {
-        next.classList.remove(classes["selected-type"]);
+      if (next.classList.contains(classes["selected-ride"])) {
+        next.classList.remove(classes["selected-ride"]);
       }
     }
   };
@@ -219,109 +232,274 @@ const MapComp = () => {
   const openSidebar = () => {
     setDisplaySiderbar(true);
   };
+
+  function getLocation() {
+    navigator.geolocation.getCurrentPosition(onSuccess, onError, {
+      enableHighAccuracy: true,
+    });
+  }
+
+  const onSuccess = (pos) => {
+    setViewState((oldVal) => {
+      return {
+        ...oldVal,
+        latitude: pos.coords.latitude,
+        longitude: pos.coords.longitude,
+      };
+    });
+    mapApi.getReverseGeoLocation(
+      {
+        lat: pos.coords.latitude,
+        lng: pos.coords.longitude,
+      },
+      (location) => {
+        setStartLocation(() => {
+          return {
+            location: location.place_name,
+            lng: pos.coords.longitude,
+            lat: pos.coords.latitude,
+          };
+        });
+      }
+    );
+  };
+
+  const onError = (err) => {
+    console.log(err);
+  };
+
+  const getDistance = () => {
+    setCurrentComp(2);
+    mapApi.getDistance(
+      startLocation.lng,
+      startLocation.lat,
+      endLocation.lng,
+      endLocation.lat,
+      (res) => {
+        setGeojson((oldData) => {
+          return {
+            ...oldData,
+            geometry: {
+              type: "LineString",
+              coordinates: [...res.routes[0].geometry.coordinates],
+            },
+          };
+        });
+        setDistance(res.routes[0].distance);
+        setDuration(res.routes[0].duration);
+        setViewState((oldData) => {
+          return {
+            ...oldData,
+            zoom: 11,
+          };
+        });
+      },
+      (err) => {}
+    );
+  };
   return (
-    <div className="classes['map-container']">
-      <div className={classes["nav-container"]}>
-        <MenuIcon
-          className={classes.menu}
-          style={{ fontSize: "35px" }}
-          onClick={openSidebar}
-        />
-      </div>
-      <div>
-        <GpsFixedIcon
-          className={classes.img}
-          onClick={getLocation}
-          style={{ fontSize: "35px" }}
-        />
-      </div>
-      <MapContainer
-        center={location.coords}
-        zoom={17}
-        className={classes.map}
-        zoomControl={false}
-      >
-        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-        <LocationMaker position={location.coords} />
-      </MapContainer>
-      <div className={classes["input-container"]}>
-        <div className={classes["ride-type"]}>
-          <span
-            className={`${classes["book-ride"]} ${classes["selected-type"]}`}
-            onClick={changeRideType}
+    <>
+      <div classes={classes["map-container"]}>
+        <Map
+          {...viewState}
+          style={{ height: "60vh" }}
+          mapStyle="mapbox://styles/mapbox/streets-v9"
+          mapboxAccessToken={token}
+          onLoad={getLocation}
+          onMove={(e) => {
+            setViewState((oldVal) => {
+              return {
+                ...oldVal,
+                latitude: e.viewState.latitude,
+                longitude: e.viewState.longitude,
+              };
+            });
+          }}
+        >
+          <Marker
+            longitude={startLocation.lng}
+            latitude={startLocation.lat}
+            color="red"
           >
-            Book Ride
-          </span>
-          <span className={`${classes["offer-ride"]}`} onClick={changeRideType}>
-            Offer Ride
-          </span>
-        </div>
-        <div className={classes["start-location"]}>
-          <LocationOnIcon className={classes["green-marker-img"]} />
-          <input
-            type="text"
-            className={classes["start-input"]}
-            onClick={() => {
-              openPopup("Enter Pickup Location");
-            }}
-            value={startLocation}
-            readOnly
+            {/* <img src="./pin.png" /> */}
+          </Marker>
+          {endLocation.location ? (
+            <Marker
+              longitude={endLocation.lng}
+              latitude={endLocation.lat}
+              color="green"
+            >
+              {/* <img src="./pin.png" /> */}
+            </Marker>
+          ) : null}
+          <Source data={geojson} type="geojson">
+            <Layer {...layerStyle} />
+          </Source>
+          {currentComp === 1 ? (
+            <div className={classes["gps-container"]}>
+              <GpsFixedIcon className={classes.gps} onClick={getLocation} />
+            </div>
+          ) : null}
+          <div className={classes["login-container"]}>
+            <div className={classes.login}>Login</div>
+          </div>
+        </Map>
+        {currentComp === 1 ? (
+          <div>
+            <div className={classes["ride-container"]}>
+              <div
+                className={`${classes["selected-ride"]} ${classes["ride-style"]}`}
+                onClick={changeRideType}
+              >
+                Find Ride
+              </div>
+              <div
+                className={`${classes["notselected-ride"]} ${classes["ride-style"]}`}
+                onClick={changeRideType}
+              >
+                Offer Ride
+              </div>
+            </div>
+            <div className={classes["input-container"]}>
+              <div
+                className={classes.input}
+                onClick={() => {
+                  openPopup("Enter Pickup Location");
+                  setLocation(() => {
+                    return {
+                      text: startLocation.location || "",
+                      fn: setStartLocation,
+                    };
+                  });
+                }}
+              >
+                {" "}
+                <FiberManualRecordIcon
+                  style={{
+                    color: "red",
+                    fontSize: "0.8rem",
+                    marginRight: "10px",
+                  }}
+                />{" "}
+                {startLocation.location
+                  ? startLocation.location
+                  : "Enter Pickup Location"}
+              </div>
+              <div
+                className={classes.input}
+                onClick={() => {
+                  openPopup("Enter Destination Location");
+                  setLocation(() => {
+                    return {
+                      text: endLocation.location || "",
+                      fn: setEndLocation,
+                    };
+                  });
+                }}
+              >
+                <FiberManualRecordIcon
+                  style={{
+                    color: "green",
+                    fontSize: "0.8rem",
+                    marginRight: "10px",
+                  }}
+                />{" "}
+                {endLocation.location
+                  ? endLocation.location
+                  : "Enter Destination Location"}
+              </div>
+              <Location
+                isOpen={isSliderOpen}
+                openCloseSlider={setSliderOpen}
+                text={placeHolderText}
+                data={location}
+                setData={setLocation}
+              />
+            </div>
+            <div className={classes["btn-container"]}>
+              {startLocation.location && endLocation.location ? (
+                <button className={classes.btn} onClick={getDistance}>
+                  Next
+                </button>
+              ) : (
+                <button className={classes.btn}>Next</button>
+              )}
+            </div>
+          </div>
+        ) : (
+          <DisplayDistance
+            startLocation={startLocation.location}
+            endLocation={endLocation.location}
+            distance={distance}
+            duration={duration}
+            changeComp={setCurrentComp}
           />
-        </div>
-        <div className={classes["end-location"]}>
-          <LocationOnIcon className={classes["red-marker-img"]} />
-          <input
-            type="text"
-            className={classes["start-input"]}
-            onClick={() => {
-              openPopup("Enter Drop Location");
-            }}
-            value={endLocation}
-            readOnly
-          />
-        </div>
+        )}
       </div>
-      <div className={classes["btn-container"]}>
-        <button className={classes.btn}>Next</button>
-      </div>
-      <div
-        className={
-          isSliderOpen ? classes["display-slider"] : classes["hide-slider"]
-        }
-      >
-        <Location
-          isOpen={isSliderOpen}
-          openCloseSlider={setSliderOpen}
-          text={placeHolderText}
-        />
-      </div>
-      <div
-        className={
-          displaySidebar ? classes["display-sidebar"] : classes["hide-sidebar"]
-        }
-      >
-        <Sidebar display={displaySidebar} />
-      </div>
-    </div>
+    </>
   );
 };
 
 export default MapComp;
 
-const LocationMaker = ({ position }) => {
-  const map = useMap();
-  useEffect(() => {
-    setLocation();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [position]);
-  function setLocation() {
-    map.flyTo(position, map.getZoom());
-  }
+const DisplayDistance = ({
+  startLocation,
+  endLocation,
+  distance,
+  duration,
+  changeComp,
+}) => {
+  const classes = useStyles();
   return (
     <>
-      <Marker position={position} icon={RedIcon}>
-        <Popup>Hello World</Popup>
-      </Marker>
+      <div className={classes["input-container"]}>
+        <div className={classes.input}>
+          <FiberManualRecordIcon
+            style={{
+              color: "red",
+              fontSize: "0.8rem",
+              marginRight: "10px",
+            }}
+          />
+          {startLocation}
+        </div>
+        <div className={classes.input}>
+          <FiberManualRecordIcon
+            style={{
+              color: "green",
+              fontSize: "0.8rem",
+              marginRight: "10px",
+            }}
+          />
+          {endLocation}
+        </div>
+      </div>
+      <div className={classes["vehicle-container"]}>
+        <div className={classes.vehicle}>
+          <TwoWheelerIcon className={classes["vehicle-logo"]} />
+          <span className={classes["vehicle-name"]}>Bike</span>
+          <span className={classes.distance}>
+            {(distance / 1000).toFixed(1)}km
+          </span>
+        </div>
+        <div className={classes.vehicle}>
+          <DirectionsCarIcon className={classes["vehicle-logo"]} />
+          <span className={classes["vehicle-name"]}>Car</span>
+          <span className={classes.distance}>
+            {(distance / 1000).toFixed(1)}km
+          </span>
+        </div>
+        <div className={classes["btn-container"]}>
+          <button className={classes.btn}>Book Ride</button>
+          <button
+            onClick={() => {
+              changeComp(1);
+            }}
+          >
+            Back
+          </button>
+        </div>
+      </div>
     </>
   );
 };

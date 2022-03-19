@@ -1,8 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
-import "leaflet/dist/leaflet.js";
-import "esri-leaflet-geocoder/dist/esri-leaflet-geocoder.js";
+import "mapbox-gl/dist/mapbox-gl.css";
 
 ReactDOM.render(
   <React.StrictMode>

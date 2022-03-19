@@ -1,6 +1,5 @@
 import React from "react";
 
-import Image from "../../components/Image";
 import User from "./User";
 import Menu from "./Menu.js";
 import Bottom from "./Bottom";
@@ -28,16 +27,21 @@ const useStyles = makeStyles({
   },
 });
 
-const Home = () => {
+const Home = ({ closeSidebar }) => {
   const classes = useStyles();
   return (
     <>
       <div className="container">
-        <div className="item-1">
+        <div style={{ width: "100%" }}>
           <div className={classes["heading"]}>
             Account{" "}
             <div className={classes.close}>
-              <CloseIcon />
+              <CloseIcon
+                style={{ cursor: "pointer" }}
+                onClick={() => {
+                  closeSidebar(false);
+                }}
+              />
             </div>
           </div>
           <div>
@@ -50,7 +54,6 @@ const Home = () => {
             <Bottom />
           </div>
         </div>
-        <Image />
       </div>
     </>
   );

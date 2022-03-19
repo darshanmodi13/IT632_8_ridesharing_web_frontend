@@ -9,8 +9,6 @@ import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import TwoWheelerIcon from "@mui/icons-material/TwoWheeler";
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import { Link } from "react-router-dom";
-//custom hooks
-import useGeoLocation from "../../hooks/useGeoLocation";
 
 //api
 import mapApi from "../../apis/mapApis";
@@ -148,6 +146,15 @@ const useStyles = makeStyles({
   distance: {
     flexBasis: "30%",
   },
+  "nav-container": {
+    position: "absolute",
+    width: "100%",
+    background: "#fff",
+    padding: "10px",
+  },
+  menu: {
+    cursor: "pointer",
+  },
 });
 
 //token
@@ -167,6 +174,7 @@ const layerStyle = {
   },
 };
 
+const isLoggedIn = true;
 const MapComp = () => {
   const classes = useStyles();
   const [isSliderOpen, setSliderOpen] = useState(false);
@@ -212,7 +220,7 @@ const MapComp = () => {
         longitude: startLocation.lng,
       };
     });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [startLocation.location]);
   const changeRideType = (e) => {
     let previous = e.target.previousSibling;
@@ -348,12 +356,17 @@ const MapComp = () => {
               <GpsFixedIcon className={classes.gps} onClick={getLocation} />
             </div>
           ) : null}
-          <div className={classes["login-container"]}>
-            <Link to="/login" className={classes.login}>
-              Login
-            </Link>
-          </div>
+          {isLoggedIn ? (
+            <Navbar openSidebar={openSidebar} />
+          ) : (
+            <div className={classes["login-container"]}>
+              <Link to="/login" className={classes.login}>
+                Login
+              </Link>
+            </div>
+          )}
         </Map>
+
         {currentComp === 1 ? (
           <div>
             <div className={classes["ride-container"]}>
@@ -446,6 +459,22 @@ const MapComp = () => {
           />
         )}
       </div>
+
+      {displaySidebar ? (
+        <div
+          style={{
+            position: "absolute",
+            top: "0%",
+            left: "0%",
+            zIndex: "9999",
+            width: "30%",
+            height: "100%",
+            background: "#fff",
+          }}
+        >
+          <Sidebar closeSidebar={setDisplaySiderbar} display={displaySidebar} />
+        </div>
+      ) : null}
     </>
   );
 };
@@ -509,6 +538,21 @@ const DisplayDistance = ({
             Back
           </button>
         </div>
+      </div>
+    </>
+  );
+};
+const Navbar = ({ openSidebar }) => {
+  const classes = useStyles();
+  return (
+    <>
+      <div className={classes["nav-container"]}>
+        <MenuIcon
+          className={classes.menu}
+          onClick={() => {
+            openSidebar(true);
+          }}
+        />
       </div>
     </>
   );

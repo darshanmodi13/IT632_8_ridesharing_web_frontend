@@ -15,8 +15,8 @@ function App() {
     <GlobalContextProvider>
       <BrowserRouter>
         <Routes>
-          {/* <Route path="/" element={<Home />} /> */}
-          <Route path="/" element={<Account />} />
+           <Route path="/" element={<Home />} /> 
+          <Route path="/Account" element={<Account />} />
         </Routes>
       </BrowserRouter>
     </GlobalContextProvider>

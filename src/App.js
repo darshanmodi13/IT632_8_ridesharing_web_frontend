@@ -8,6 +8,7 @@ import { GlobalContextProvider } from "./contexts/GlobalContext";
 
 //Pages
 import Home from "./pages/Home/Home";
+import Account from "./pages/Account/Account";
 import Login from "./pages/Login/Login";
 
 function App() {
@@ -15,8 +16,9 @@ function App() {
     <GlobalContextProvider>
       <BrowserRouter>
         <Routes>
-             <Route path="/" element={<Login />} />
-          {/*<Route path="/" element={<Home />} />*/}
+           <Route path="/" element={<Home />} /> 
+          <Route path="/account" element={<Account />} />
+             <Route path="/login" element={<Login />} />
         </Routes>
       </BrowserRouter>
     </GlobalContextProvider>

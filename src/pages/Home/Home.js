@@ -1,7 +1,9 @@
 import React from "react";
 
+//Components
 import Image from "../../components/Image";
 import MapComp from "./MapComp";
+
 const Home = () => {
   return (
     <>

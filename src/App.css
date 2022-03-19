@@ -1,8 +1,11 @@
+:root {
+  --background: #029544;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
-  /* font-family: "Montserrat", sans-serif; */
-  font-family: "Roboto", sans-serif;
+  font-family: "Montserrat", sans-serif;
 }
 
 .container {
@@ -26,4 +29,7 @@
   .item-2 {
     display: none;
   }
+}
+a{
+  text-decoration: none;
 }

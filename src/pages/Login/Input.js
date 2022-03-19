@@ -1,116 +1,109 @@
 import React from "react";
 import { makeStyles } from "@mui/styles";
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import { useNavigate } from "react-router-dom";
 
 const useStyles = makeStyles({
-    "phone_no":{
-      fontFamily:"Roboto",
-      fontSize:"25px",
-      fontWeight:"900",
-      padding: "20px"
-  },
-  
-    "num":{
-      paddingLeft: "21px",
-  },
-  
-    "hr":{
-      padding:"7px 0 0 21px"
-    },
-  
-    "br-gr":{
-      borderBottom: "5px solid",
-      borderImageSlice: "1",
-      borderWidth: "7px",
-      width: "50px"
-    },
-  
-    "br-gr br-gr-green":{
-      borderImageSource: "linear-gradient(to left, #00C853, #B2FF59)"
-    },
-  
-    "col1":{
-      height: "60px",
+  "login-container": {
+    background: "#fff",
+    height: "100%",
+    width: "100%",
+    paddingTop: "2%",
+    marginTop: "2%",
+    "@media(max-width:1200px)": {
       width: "100%",
-      paddingLeft:"30px"
+    },
   },
-  
-  "col2":{
-      height: "60px",
-      width: "100%",
-      padding: "10px 0 0 30px"
-  },
-  
-  "col3":{
-      height: "60px",
-      width: "100%",
-      padding: "10px 0 0 100px"
-  },
-  
-  "txt":{
-    font: "Roboto",
-    color: "#333", 
+  header: {
+    display: "flex",
     fontSize: "20px",
-    width: "250px", 
-    height: "40px",
-    letterSpacing:"1px",
-    borderRadius: "10px"
-  },
-  
-  "btn":{
-    padding: "1.3em 3em",
-    fontSize: "12px",
-    textTransform:"uppercase",
-    letterSpacing: "2.5px",
     fontWeight: "500",
-    color: "#fff",
-    backgroundColor: "#000",
-    border: "none",
-    borderRadius: "45px",
-    boxShadow: "0px 8px 15px rgba(0, 0, 0, 0.1)",
-    transition: "all 0.3s ease 0s",
+  },
+  "arrow-container": {
+    flexBasis: "15%",
+    textAlign: "center",
+  },
+  arrow: {
     cursor: "pointer",
-    outline: "none"
-   },
-   
-   "btn:hover":{
-    backgroundColor: "#029544",
-    boxShadow: "0px 15px 20px rgba(46, 229, 157, 0.4)",
+  },
+  "header-text": {
+    flexBasis: "85%",
+  },
+  "input-container": {
+    textAlign: "center",
+    marginTop: "4%",
+  },
+  input: {
+    height: "20%",
+    width: "90%",
+    border: "2px solid black",
+    padding: "10px",
+  },
+  "btn-container": {
+    textAlign: "center",
+    width: "100%",
+  },
+  btn: {
+    marginTop: "3%",
+    width: "90%",
+    fontSize: "16px",
+    padding: "10px",
+    border: "1px solid transparent",
+    borderRadius: "10px",
+    background: "var(--background)",
     color: "#fff",
-    transform: "translateY(-7px)"
-   },
-   
-   "btn:active":{
-    transform: "translateY(-1px)",
-   }
-  
-  });
-  
+    cursor: "pointer",
+  },
+
+  "forgot-password": {
+    marginTop: "2%",
+    textAlign: "center",
+  },
+  register: {
+    marginTop: "2%",
+    textAlign: "center",
+  },
+});
 
 const Input = () => {
-    const classes = useStyles();
+  const classes = useStyles();
+  const navigate = useNavigate();
   return (
     <>
-      <div className="container">
-        <div className="item-1">
-          <div className={classes["phone_no"]}>
-              <b> ˂ </b>  Enter Phone <br/><span className={classes["num"]}>Number</span><br/>
-              
-              <div className={classes["hr"]}>
-                <div className={classes["br-gr br-gr-green"]}></div>
-              </div>
-            </div>        
-                <div className={classes["col1"]}>
-                    <input type="text" pattern="[7-9]{1}[0-9]{9}" title="Phone number with 7-9 and remaing 9 digit with 0-9" className={classes["txt"]} placeholder="Mobile Number" />                
-                </div>
-
-                <div className={classes["col2"]}>
-                  <input type="text" className={classes["txt"]} placeholder="Password" />
-                </div>
-
-                <div className={classes["col3"]}>
-                  <button type="submit" className={classes["btn"]} onClick={() => this.onSubmit()} value="Sign In" >Sign In</button>               
-                </div>
+      <div className={classes["login-container"]}>
+        <div className={classes.header}>
+          <div className={classes["arrow-container"]}>
+            <ArrowBackIosNewIcon
+              className={classes.arrow}
+              style={{ fontSize: "25px" }}
+              onClick={() => {
+                navigate(-1);
+              }}
+            />
+          </div>
+          <div className={classes["header-text"]}>Signin</div>
         </div>
+        <div className={classes["input-container"]}>
+          <input
+            type="text"
+            pattern="[7-9]{1}[0-9]{9}"
+            title="Phone number with 7-9 and remaing 9 digit with 0-9"
+            className={classes["input"]}
+            placeholder="Enter Mobile Number"
+          />
+        </div>
+        <div className={classes["input-container"]}>
+          <input
+            type="password"
+            className={classes["input"]}
+            placeholder="Enter Password"
+          />
+        </div>
+        <div className={classes["btn-container"]}>
+          <button className={classes.btn}>Book Ride</button>
+        </div>
+        <div className={classes["register"]}>Don't Have Account ? Register</div>
+        <div className={classes["forgot-password"]}>Forgot Password</div>
       </div>
     </>
   );

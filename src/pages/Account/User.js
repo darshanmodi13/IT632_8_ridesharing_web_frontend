@@ -1,11 +1,8 @@
 import React from "react";
 import image from "../../assets/img/default_male.png";
 import { makeStyles } from "@mui/styles";
-import { padding } from "@mui/system";
-import { PaddingOutlined } from "@mui/icons-material";
 
 const useStyles = makeStyles({
-
     "profile":{
         height: "90px",
         fontSize: "18px",

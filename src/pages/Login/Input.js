@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@mui/styles";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import { useNavigate } from "react-router-dom";
-
+import { Link } from "react-router-dom";
 const useStyles = makeStyles({
   "login-container": {
     background: "#fff",
@@ -68,6 +68,19 @@ const useStyles = makeStyles({
 const Input = () => {
   const classes = useStyles();
   const navigate = useNavigate();
+  const [input, setInput] = useState({
+    mobile: "",
+    password: "",
+  });
+
+  const changeInput = (e) => {
+    setInput((oldval) => {
+      return {
+        ...oldval,
+        [e.target.name]: e.target.value,
+      };
+    });
+  };
   return (
     <>
       <div className={classes["login-container"]}>
@@ -90,6 +103,9 @@ const Input = () => {
             title="Phone number with 7-9 and remaing 9 digit with 0-9"
             className={classes["input"]}
             placeholder="Enter Mobile Number"
+            value={input.mobile}
+            name="mobile"
+            onChange={changeInput}
           />
         </div>
         <div className={classes["input-container"]}>
@@ -97,13 +113,20 @@ const Input = () => {
             type="password"
             className={classes["input"]}
             placeholder="Enter Password"
+            value={input.password}
+            name="password"
+            onChange={changeInput}
           />
         </div>
         <div className={classes["btn-container"]}>
           <button className={classes.btn}>Book Ride</button>
         </div>
-        <div className={classes["register"]}>Don't Have Account ? Register</div>
-        <div className={classes["forgot-password"]}>Forgot Password</div>
+        <div className={classes["register"]}>
+          Don't Have Account ? <Link to="/register">Register</Link>
+        </div>
+        <div className={classes["forgot-password"]}>
+          <Link to="/forgot-password">Forgot Password</Link>
+        </div>
       </div>
     </>
   );

@@ -1,6 +1,7 @@
 import React from "react";
 
 import User from "./User";
+import Image from "../../components/Image";
 import Menu from "./Menu.js";
 import Bottom from "./Bottom";
 import { makeStyles } from "@mui/styles";
@@ -32,7 +33,7 @@ const Home = ({ closeSidebar }) => {
   return (
     <>
       <div className="container">
-        <div style={{ width: "100%" }}>
+        <div className="item-1" style={{ width: "100%" }}>
           <div className={classes["heading"]}>
             Account{" "}
             <div className={classes.close}>
@@ -54,6 +55,7 @@ const Home = ({ closeSidebar }) => {
             <Bottom />
           </div>
         </div>
+        <Image />
       </div>
     </>
   );

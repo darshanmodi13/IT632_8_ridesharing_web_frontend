@@ -4,6 +4,9 @@ import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import CloseIcon from "@mui/icons-material/Close";
+import { useGlobalContext } from "../../contexts/GlobalContext";
+import authApis from "../../apis/auth.api";
+import authMethods from "../../utils/authMethods";
 
 const useStyles = makeStyles({
   "login-container": {
@@ -19,25 +22,21 @@ const useStyles = makeStyles({
     display: "flex",
     fontSize: "20px",
     fontWeight: "bolder",
-    paddingBottom:"28%"
+    paddingBottom: "28%",
   },
 
   subheader: {
-    fontSize: "22px",
+    fontSize: "1.5rem",
     fontWeight: "bolder",
-    paddingLeft:"27%",
-    paddingBottom:"1%",
-    width:"100%",
-    position:"relative"
+    width: "100%",
+    textAlign: "center",
   },
   subheader2: {
     fontSize: "12px",
     fontWeight: "500",
-    paddingLeft:"30%",
-    color:"grey",
-    paddingBottom:"1%",
-    width:"100%",
-    position: "relative"
+    width: "100%",
+    textAlign: "center",
+    color: "grey",
   },
 
   "arrow-container": {
@@ -60,36 +59,39 @@ const useStyles = makeStyles({
     width: "90%",
     border: "2px solid black",
     padding: "12px",
-    outline:"none",
-    color:"black",
-    borderRadius:"10px",
+    outline: "none",
+    color: "black",
+    borderRadius: "10px",
   },
   "btn-container": {
     textAlign: "center",
     width: "100%",
+    display: "flex",
+    justifyContent: "center",
   },
   btn: {
-    marginTop: "8%",
+    marginTop: "3%",
     width: "60%",
     fontSize: "16px",
     padding: "12px",
-    marginBottom:"10px",
     border: "1px solid transparent",
     borderRadius: "16px",
     background: "black",
     color: "#fff",
     cursor: "pointer",
-    fontWeight:"bold"
+    fontWeight: "bold",
   },
 
   "forgot-password": {
     marginTop: "3%",
     marginBottom: "1%",
-    paddingLeft:"56%"
+    float: "right",
+    paddingRight: "6%",
   },
   register: {
     marginTop: "2%",
     textAlign: "center",
+    width: "100%",
   },
   "error-container": {
     marginTop: "2%",
@@ -119,15 +121,16 @@ const useStyles = makeStyles({
 
 const Input = () => {
   const classes = useStyles();
+  const { authDispatch } = useGlobalContext();
   const navigate = useNavigate();
   const [input, setInput] = useState({
-    mobile: "",
+    mobile_no: "",
     password: "",
   });
   const [err, setErr] = useState("");
 
   const changeInput = (e) => {
-    if (e.target.name === "mobile") {
+    if (e.target.name === "mobile_no") {
       let num = Number(e.target.value);
       if (Number.isNaN(num)) {
         return;
@@ -141,13 +144,24 @@ const Input = () => {
     });
   };
   const submitForm = () => {
-    if (!input.mobile || input.mobile.length !== 10) {
-      setErr("Enter Valid Mobile Number"); 
+    if (!input.mobile_no || input.mobile_no.length !== 10) {
+      setErr("Enter Valid Mobile Number");
       return;
     } else if (!input.password) {
       setErr("Enter Password");
       return;
     }
+    authApis.signin(
+      input,
+      authDispatch,
+      async (data) => {
+        console.log(data);
+        authMethods.setIdToken(data._id, data.token, 1, data.mobile_no);
+      },
+      (err = "") => {
+        setErr(err);
+      }
+    );
   };
   const closeErr = () => {
     setErr("");
@@ -167,10 +181,9 @@ const Input = () => {
           </div>
           <div className={classes["header-text"]}>Signin</div>
         </div>
-        
+
         <div className={classes.subheader}>Welcome Back!</div>
         <div className={classes.subheader2}>Please enter your details.</div>
-        
 
         {err ? (
           <div className={`${classes["error-container"]}`}>
@@ -191,8 +204,8 @@ const Input = () => {
             title="Phone number with 7-9 and remaing 9 digit with 0-9"
             className={classes["input"]}
             placeholder="Enter Mobile Number"
-            value={input.mobile}
-            name="mobile"
+            value={input.mobile_no}
+            name="mobile_no"
             maxLength="10"
             onChange={changeInput}
           />
@@ -220,7 +233,6 @@ const Input = () => {
         <div className={classes["register"]}>
           Don't Have an account? <Link to="/register">Register here</Link>
         </div>
-       
       </div>
     </>
   );

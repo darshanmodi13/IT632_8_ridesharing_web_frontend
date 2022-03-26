@@ -3,4 +3,5 @@ export const actionTypes = {
   SET_ID: "SET_ID",
   SET_TOKEN: "SET_TOKEN",
   SET_ROLE: "SET_ROLE",
+  SET_MOBILE: "SET_MOBILE",
 };

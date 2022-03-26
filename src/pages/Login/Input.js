@@ -49,6 +49,7 @@ const useStyles = makeStyles({
   },
   "header-text": {
     flexBasis: "85%",
+    fontWeight: "bold",
   },
   "input-container": {
     textAlign: "center",
@@ -68,9 +69,8 @@ const useStyles = makeStyles({
     width: "100%",
   },
   btn: {
-    marginTop: "5%",
-    width: "90%",
-    letterSpacing:"3px",
+    marginTop: "8%",
+    width: "60%",
     fontSize: "16px",
     padding: "12px",
     marginBottom:"10px",
@@ -99,10 +99,11 @@ const useStyles = makeStyles({
   },
   err: {
     width: "90%",
-    background: "red",
+    background: "rgba(255, 0, 0, 0.747)",
     color: "#fff",
     padding: "10px 10px",
     fontSize: "0.8rem",
+    fontWeight: "500",
   },
   close: {
     float: "right",
@@ -126,6 +127,12 @@ const Input = () => {
   const [err, setErr] = useState("");
 
   const changeInput = (e) => {
+    if (e.target.name === "mobile") {
+      let num = Number(e.target.value);
+      if (Number.isNaN(num)) {
+        return;
+      }
+    }
     setInput((oldval) => {
       return {
         ...oldval,
@@ -186,6 +193,7 @@ const Input = () => {
             placeholder="Enter Mobile Number"
             value={input.mobile}
             name="mobile"
+            maxLength="10"
             onChange={changeInput}
           />
         </div>

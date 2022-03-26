@@ -12,6 +12,7 @@ const useStyles = makeStyles({
   },
 
   heading: {
+    width : '30vw',
     fontSize: ".9rem",
     fontWeight: "700",
     padding: "17px 20px 17px 20px",
@@ -44,10 +45,10 @@ const Home = ({ closeSidebar }) => {
               />
             </div>
           </div>
-          <div>
+          <div style={{ width: "100%" }}>
             <User />
           </div>
-          <div>
+          <div style={{ width: "100%" }}>
             <Menu />
           </div>
           <div>

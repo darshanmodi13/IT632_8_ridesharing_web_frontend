@@ -5,24 +5,11 @@
 .form {
   text-align: center;
   background-color: whitesmoke;
-  display: contents;
-  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   border: 1 px solid #ccc;
-  margin: 8px 0px;
 }
-
-.button {
-  margin-top: 2%;
-  width: 90%;
-  font-size: 1rem;
-  padding: 10px;
-  border: 1px solid transparent;
-  border-radius: 10px;
-  background: var(--background);
-  color: #fff;
-  cursor: pointer;
-}
-
 .h3 {
   color: seagreen;
   padding-top: 5px;
@@ -70,8 +57,12 @@
   flex-basis: 85%;
 }
 .input-container {
-  text-align: center;
-  margin-top: 5%;
+  height: 100%;
+  margin-top: 25%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 .input {
   margin-top: 3%;
@@ -86,12 +77,12 @@
 }
 .button {
   margin-top: 2%;
-  width: 60%;
+  width: 90%;
   font-size: 1rem;
   padding: 10px;
   border: 1px solid transparent;
-  border-radius: 20px;
-  background: var(--background);
+  border-radius: 16px;
+  background: black;
   color: #fff;
   cursor: pointer;
 }
@@ -101,6 +92,7 @@
   width: 100%;
   display: flex;
   justify-content: center;
+  border: 1px solid black;
 }
 .err {
   width: 90%;
@@ -113,4 +105,26 @@
 .close {
   float: right;
   cursor: pointer;
+}
+
+.otp-container {
+  display: flex;
+  height: 100%;
+  width: 60%;
+  justify-content: space-evenly;
+  margin: auto;
+  margin-top: 25%;
+}
+
+.otp {
+  width: 20%;
+  padding: 10px;
+  border: 2px solid black;
+  outline: none;
+  font-size: 1rem;
+  text-align: center;
+}
+
+.otp:focus {
+  outline: none;
 }

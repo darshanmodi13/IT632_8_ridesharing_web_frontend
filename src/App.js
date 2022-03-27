@@ -10,6 +10,7 @@ import { GlobalContextProvider } from "./contexts/GlobalContext";
 import Home from "./pages/Home/Home";
 import Account from "./pages/Account/Account";
 import Login from "./pages/Login/Login";
+import ViewProfile from "./pages/ViewProfile/ViewProfile";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="/" element={<Home />} exact />
           <Route path="/account" element={<Account />} exact />
           <Route path="/login" element={<Login />} exact />
+          <Route path="/viewProfile" element={<ViewProfile/>} exact/>
         </Routes>
       </BrowserRouter>
     </GlobalContextProvider>

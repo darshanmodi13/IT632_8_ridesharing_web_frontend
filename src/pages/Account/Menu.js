@@ -10,7 +10,8 @@ const useStyles = makeStyles({
 
     
     "functions":{
-        backgroundColor: "white"
+        backgroundColor: "white",
+        width : '30vw'
     },
 
     "diffIcon":{
@@ -26,9 +27,8 @@ const useStyles = makeStyles({
 
     "tab1":{
         display:"flex",
-        border: "1px solid silver",
+        borderBottom: "1px solid silver",
         padding: "12px 20px 12px 20px",
-        BorderTop: "1px solid silver"
     },
 
     "menuItems":{

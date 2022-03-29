@@ -9,7 +9,7 @@ import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import TwoWheelerIcon from "@mui/icons-material/TwoWheeler";
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import { Link } from "react-router-dom";
-
+import { useGlobalContext } from "../../contexts/GlobalContext";
 //api
 import mapApi from "../../apis/mapApis";
 
@@ -174,7 +174,6 @@ const layerStyle = {
   },
 };
 
-const isLoggedIn = true;
 const MapComp = () => {
   const classes = useStyles();
   const [isSliderOpen, setSliderOpen] = useState(false);
@@ -211,6 +210,7 @@ const MapComp = () => {
     text: null,
     fn: null,
   });
+  const { authState } = useGlobalContext();
 
   useEffect(() => {
     setViewState((oldData) => {
@@ -356,7 +356,7 @@ const MapComp = () => {
               <GpsFixedIcon className={classes.gps} onClick={getLocation} />
             </div>
           ) : null}
-          {isLoggedIn ? (
+          {authState.authenticated ? (
             <Navbar openSidebar={openSidebar} />
           ) : (
             <div className={classes["login-container"]}>

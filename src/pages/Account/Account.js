@@ -1,6 +1,7 @@
 import React from "react";
 
 import User from "./User";
+import Image from "../../components/Image";
 import Menu from "./Menu.js";
 import Bottom from "./Bottom";
 import { makeStyles } from "@mui/styles";
@@ -12,6 +13,7 @@ const useStyles = makeStyles({
   },
 
   heading: {
+    width : '30vw',
     fontSize: ".9rem",
     fontWeight: "700",
     padding: "17px 20px 17px 20px",
@@ -32,7 +34,7 @@ const Home = ({ closeSidebar }) => {
   return (
     <>
       <div className="container">
-        <div style={{ width: "100%" }}>
+        <div className="item-1" style={{ width: "100%" }}>
           <div className={classes["heading"]}>
             Account{" "}
             <div className={classes.close}>
@@ -44,16 +46,17 @@ const Home = ({ closeSidebar }) => {
               />
             </div>
           </div>
-          <div>
+          <div style={{ width: "100%" }}>
             <User />
           </div>
-          <div>
+          <div style={{ width: "100%" }}>
             <Menu />
           </div>
           <div>
             <Bottom />
           </div>
         </div>
+        <Image />
       </div>
     </>
   );

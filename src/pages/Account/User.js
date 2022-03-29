@@ -4,6 +4,7 @@ import { makeStyles } from "@mui/styles";
 
 const useStyles = makeStyles({
     "profile":{
+        width : '30vw',
         height: "90px",
         fontSize: "1rem",
         fontWeight: "700",

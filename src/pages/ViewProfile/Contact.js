@@ -14,23 +14,7 @@ const useStyles = makeStyles({
         marginTop:"10px",
         marginLeft: "20px",
         display: "flex"
-    },
-
-    "mobile_change_button":{
-        marginLeft: "200px",
-        background:"white",
-        border: "none",
-        color: "blue",
-        fontSize: "12px"
-    },
-
-    "email_change_button":{
-        marginLeft: "290px",
-        background:"white",
-        border: "none",
-        color: "blue",
-        fontSize: "12px"
-    },
+    }
 
 });
 
@@ -41,22 +25,14 @@ const Contact = () => {
             <div className={classes['contact_details']}>
                 <div className={classes['mobile']}>
                     <div>
-                        <div className={classes["number"]}> Contact Number 
-                            <div>
-                                <button className={classes["mobile_change_button"]} type="button">Change</button>
-                            </div>
-                        </div>
+                        <div className={classes["number"]}> Contact Number </div>
                         <div className={classes["number"]}> 6355657697 </div>
                     </div>
                 </div>
 
                 <div className={classes['mobile']}>
                     <div>
-                        <div className={classes["number"]}> Email 
-                            <div>
-                                <button className={classes["email_change_button"]} type="button">Change</button>
-                            </div>
-                        </div>
+                        <div className={classes["number"]}> Email </div>
                         <div className={classes["number"]}> 202112069@daiict.ac.in </div>
                     </div>
                 </div>

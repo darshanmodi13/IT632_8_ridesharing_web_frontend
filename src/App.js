@@ -10,6 +10,7 @@ import { GlobalContextProvider } from "./contexts/GlobalContext";
 import Home from "./pages/Home/Home";
 import Login from "./pages/Login/Login";
 import Registermain from "./pages/Register/RegsiterMain";
+import ViewProfile from "./pages/ViewProfile/ViewProfile";
 
 //routes
 import NotLoggedInRoutes from "./components/routes/NotLoggedInRoute";
@@ -36,6 +37,13 @@ function App() {
               <NotLoggedInRoutes>
                 <Registermain />
               </NotLoggedInRoutes>
+            }
+            exact
+          />
+          <Route
+            path="/viewprofile"
+            element={
+              <ViewProfile></ViewProfile>
             }
             exact
           />

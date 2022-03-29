@@ -38,8 +38,8 @@ const useStyles = makeStyles({
         border: "1px solid grey",
         borderRadius: "5px",
         position: "absolute",
-        top: "5px",
-        right: "1070px"
+        top: "1%",
+        left: "25%"
     }
 });
 

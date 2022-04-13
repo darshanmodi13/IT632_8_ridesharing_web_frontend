@@ -87,72 +87,76 @@ const Location = ({ openCloseSlider, isOpen, text, data, setData }) => {
     openCloseSlider(false);
   };
   return (
-    <div
-      className={`${isOpen ? classes["slider-up"] : classes["slider-down"]} ${
-        classes["location-container"]
-      }`}
-    >
-      <div className={classes.header}>
+    <>
+      {isOpen ? (
         <div
-          className={classes["arrow-container"]}
-          onClick={() => {
-            openCloseSlider(false);
-          }}
+          className={`${
+            isOpen ? classes["slider-up"] : classes["slider-down"]
+          } ${classes["location-container"]}`}
         >
-          <ArrowBackIosNewIcon
-            className={classes.arrow}
-            style={{ fontSize: "25px" }}
-          />
+          <div className={classes.header}>
+            <div
+              className={classes["arrow-container"]}
+              onClick={() => {
+                openCloseSlider(false);
+              }}
+            >
+              <ArrowBackIosNewIcon
+                className={classes.arrow}
+                style={{ fontSize: "25px" }}
+              />
+            </div>
+            <div className={classes["header-text"]}>{text}</div>
+          </div>
+          <div className={classes["input-container"]}>
+            <input
+              type="text"
+              className={classes.input}
+              placeholder={text}
+              value={data.text || ""}
+              onChange={(e) => {
+                data.fn((oldData) => {
+                  return {
+                    ...oldData,
+                    location: e.target.value,
+                  };
+                });
+                setData((oldData) => {
+                  return {
+                    ...oldData,
+                    text: e.target.value,
+                  };
+                });
+                mapApi.getGeoLocation(
+                  e.target.value,
+                  (res) => {
+                    setLocations(res);
+                  },
+                  () => {
+                    console.log("-- Error in getting places --");
+                  }
+                );
+              }}
+            />
+            <ul className={classes.ul}>
+              {Locations.map((location, index) => {
+                return (
+                  <li
+                    key={index}
+                    className={classes.li}
+                    onClick={() => {
+                      locationClicked(location);
+                    }}
+                  >
+                    {location.place_name}
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
         </div>
-        <div className={classes["header-text"]}>{text}</div>
-      </div>
-      <div className={classes["input-container"]}>
-        <input
-          type="text"
-          className={classes.input}
-          placeholder={text}
-          value={data.text || ""}
-          onChange={(e) => {
-            data.fn((oldData) => {
-              return {
-                ...oldData,
-                location: e.target.value,
-              };
-            });
-            setData((oldData) => {
-              return {
-                ...oldData,
-                text: e.target.value,
-              };
-            });
-            mapApi.getGeoLocation(
-              e.target.value,
-              (res) => {
-                setLocations(res);
-              },
-              () => {
-                console.log("-- Error in getting places --");
-              }
-            );
-          }}
-        />
-        <ul className={classes.ul}>
-          {Locations.map((location, index) => {
-            return (
-              <li
-                key={index}
-                className={classes.li}
-                onClick={() => {
-                  locationClicked(location);
-                }}
-              >
-                {location.place_name}
-              </li>
-            );
-          })}
-        </ul>
-      </div>
-    </div>
+      ) : null}
+    </>
   );
 };
 

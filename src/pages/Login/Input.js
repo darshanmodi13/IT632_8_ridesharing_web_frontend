@@ -44,6 +44,7 @@ const useStyles = makeStyles({
   "btn-container": {
     textAlign: "center",
     width: "100%",
+  
   },
   btn: {
     marginTop: "3%",

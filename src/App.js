@@ -10,6 +10,10 @@ import { GlobalContextProvider } from "./contexts/GlobalContext";
 import Home from "./pages/Home/Home";
 import Login from "./pages/Login/Login";
 import Registermain from "./pages/Register/RegsiterMain";
+import BookRideMain from "./pages/BookRide/BookRideMain";
+import FindRideMain from "./pages/FindRide/FindRideMain";
+import DriverDistanceMain from "./pages/DriverDistance/DriverDistanceMain";
+import OfferRide from "./pages/OfferRide/Main";
 import ViewProfile from "./pages/ViewProfile/ViewProfile";
 
 //routes
@@ -22,6 +26,14 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} exact />
+          <Route path="/book-ride" element={<BookRideMain />} exact />
+          <Route path="/find-ride" element={<FindRideMain />} exact />
+          <Route path="/offer-ride" element={<OfferRide />} exact />
+          <Route
+            path="/wait-for-driver"
+            element={<DriverDistanceMain />}
+            exact
+          />
           <Route
             path="/login"
             element={

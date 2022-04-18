@@ -1,5 +1,6 @@
 import Axios from "../axiosInstance";
 import { actionTypes } from "../actionTypes/actionType";
+
 const authApis = {
   signin: async (credentials, dispatch, onSucess, onError) => {
     try {
@@ -24,6 +25,7 @@ const authApis = {
       onSucess(res.data.data.user);
       return;
     } catch (error) {
+      console.log(error.response);
       onError(error.response.data.message);
     }
   },

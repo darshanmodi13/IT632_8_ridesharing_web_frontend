@@ -159,6 +159,7 @@ const Input = () => {
         authMethods.setIdToken(data._id, data.token, 1, data.mobile_no);
       },
       (err = "") => {
+        console.log(err);
         setErr(err);
       }
     );

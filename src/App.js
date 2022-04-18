@@ -14,6 +14,8 @@ import BookRideMain from "./pages/BookRide/BookRideMain";
 import FindRideMain from "./pages/FindRide/FindRideMain";
 import DriverDistanceMain from "./pages/DriverDistance/DriverDistanceMain";
 import OfferRide from "./pages/OfferRide/Main";
+import ViewProfile from "./pages/ViewProfile/ViewProfile";
+
 //routes
 import NotLoggedInRoutes from "./components/routes/NotLoggedInRoute";
 import AuthRoutes from "./components/routes/AuthRoute";
@@ -47,6 +49,13 @@ function App() {
               <NotLoggedInRoutes>
                 <Registermain />
               </NotLoggedInRoutes>
+            }
+            exact
+          />
+          <Route
+            path="/viewprofile"
+            element={
+              <ViewProfile></ViewProfile>
             }
             exact
           />

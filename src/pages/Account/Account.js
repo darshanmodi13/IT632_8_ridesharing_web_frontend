@@ -56,7 +56,7 @@ const Home = ({ closeSidebar }) => {
             <Bottom />
           </div>
         </div>
-        <Image />
+        {/* <Image /> */}
       </div>
     </>
   );

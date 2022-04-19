@@ -59,24 +59,7 @@ const useStyles = makeStyles({
   "lic":{
     padding:"4px",
   },
-
-  "select-container": {
-    marginTop: "4%",
-    paddingLeft:"5%",
-    paddingRight:"5%"
-  },
-
   
-  "select": {
-    fontSize:"14px",
-    height:"20%",
-    width:"100%",
-    color:"black",
-    borderRadius:"10px",
-    border:"2px solid black"
-  },
-
-
   "btn-container": {
     textAlign: "center",
     width: "100%",
@@ -120,12 +103,6 @@ const Info = () => {
           <div className={classes["header-text"]}>Upload</div>
         </div>
         
-        
-
-        <div className={classes["select-container"]}>
-             <Select options={vehicle} className={classes["select"]} placeholder="Vehicle Type" />
-        </div>
-
         <div className={classes["input-container"]}>
         <input
             type="text"
@@ -163,6 +140,16 @@ const Info = () => {
           />
         </div>
 
+        <div className={classes["lic-container"]}>
+            <div className={classes["lic"]}>Upload RC Image</div>
+            <input
+                type="file"
+                accept="image/*"
+                className={classes["lic"]}
+                id="contained-button-file"
+            />
+        </div>
+
         <div className={classes["input-container"]}>
         <input
             type="text"
@@ -174,7 +161,7 @@ const Info = () => {
 
         <div className={classes["btn-container"]}>
           <button className={classes.btn}>
-            Update Profile
+            Upload Profile
           </button>
         </div>
        

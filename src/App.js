@@ -8,9 +8,13 @@ import { GlobalContextProvider } from "./contexts/GlobalContext";
 
 //Pages
 import Home from "./pages/Home/Home";
-import Account from "./pages/Account/Account";
 import Login from "./pages/Login/Login";
 import Upload from "./pages/Upload/Upload";
+import Registermain from "./pages/Register/RegsiterMain";
+
+//routes
+import NotLoggedInRoutes from "./components/routes/NotLoggedInRoute";
+import AuthRoutes from "./components/routes/AuthRoute";
 
 function App() {
   return (
@@ -18,9 +22,31 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} exact />
-          <Route path="/account" element={<Account />} exact />
-          <Route path="/login" element={<Login />} exact />
-          <Route path="/upload" element={<Upload />} exact />
+          <Route
+            path="/login"
+            element={
+              <NotLoggedInRoutes>
+                <Login />
+              </NotLoggedInRoutes>
+            }
+            exact
+          />
+          <Route
+            path="/register"
+            element={
+              <NotLoggedInRoutes>
+                <Registermain />
+              </NotLoggedInRoutes>
+            }
+            exact
+          />
+          <Route
+            path="/Upload"
+            element={
+              <Upload />  
+            }
+            exact
+          />
         </Routes>
       </BrowserRouter>
     </GlobalContextProvider>

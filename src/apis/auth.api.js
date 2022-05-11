@@ -26,7 +26,7 @@ const authApis = {
       return;
     } catch (error) {
       console.log(error.response);
-      onError(error.response.data.message);
+      onError(error.response.data.error);
     }
   },
   signup: async (credentials, dispatch, onSucess, onError) => {

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { makeStyles } from "@mui/styles";
 import { Map, Marker, Source, Layer } from "react-map-gl";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import ReactLoading from "react-loading";
 import { useGlobalContext } from "../../contexts/GlobalContext";
 //api
@@ -108,7 +108,8 @@ const OfferRideComp = () => {
     lat: 0,
     lng: 0,
   });
-  const [passenger, setPassengerLocation] = useState({});
+  const [passenger, setPassengerLocation] = useState(null);
+
   useEffect(() => {
     let start = JSON.parse(query.get("start"));
     let end = JSON.parse(query.get("end"));
@@ -120,7 +121,12 @@ const OfferRideComp = () => {
         longitude: start.lng,
       };
     });
-    socket.emit("join", { start: start, end: end, type: "driver" });
+    socket.emit("join", {
+      start: start,
+      end: end,
+      type: "driver",
+      city: start.location.split(",")[0],
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -133,7 +139,6 @@ const OfferRideComp = () => {
       setAvailableRides((oldVal) => {
         return [...oldVal, data];
       });
-      console.log(availableRides);
     });
     socket.on("ride-cancelled", (data) => {
       let arr = availableRides.filter((ride) => ride.id !== data.user_id);
@@ -153,10 +158,14 @@ const OfferRideComp = () => {
     });
     socket.on("receive-passenger-location", (data) => {
       setPassengerLocation(data);
-      setBtnTxt("Arrived");
+      setBtnTxt("Start Ride");
     });
   };
-
+  const endRide = () => {
+    socket.emit("end-ride", { ...passenger });
+    socket.disconnect();
+    navigate("/");
+  };
   return (
     <>
       <div className={classes["map-container"]}>
@@ -175,15 +184,24 @@ const OfferRideComp = () => {
             });
           }}
         >
-          <Marker
-            longitude={startLocation.lng}
-            latitude={startLocation.lat}
-            color="red"
-          ></Marker>
+          {passenger ? (
+            <>
+              <Marker
+                longitude={passenger.start.lng}
+                latitude={passenger.start.lat}
+                color="red"
+              ></Marker>
+              <Marker
+                longitude={passenger.end.lng}
+                latitude={passenger.end.lat}
+                color="blue"
+              ></Marker>
 
-          <Source data={geojson} type="geojson">
-            <Layer {...layerStyle} />
-          </Source>
+              <Source data={geojson} type="geojson">
+                <Layer {...layerStyle} />
+              </Source>
+            </>
+          ) : null}
         </Map>
         <div className={classes["loader-container"]}>
           {availableRides && availableRides.length !== 0
@@ -198,6 +216,7 @@ const OfferRideComp = () => {
                     rideSelect={rideSelect}
                     btn={btnTxt}
                     setBtn={setBtnTxt}
+                    endRide={endRide}
                   />
                 );
               })
@@ -222,10 +241,19 @@ const OfferRideComp = () => {
 
 export default OfferRideComp;
 
-const Rides = ({ current, start, end, id, rideSelect, btn, setBtn }) => {
+const Rides = ({
+  current,
+  start,
+  end,
+  id,
+  rideSelect,
+  btn,
+  setBtn,
+  endRide,
+}) => {
   const classes = useStyles();
   const [distance, setDistance] = useState(null);
-
+  const navigate = useNavigate();
   useEffect(() => {
     getDistance(current.lat, current.lng, start.lat, start.lng);
   }, []);
@@ -250,16 +278,35 @@ const Rides = ({ current, start, end, id, rideSelect, btn, setBtn }) => {
         <div className={classes.ride}>
           Distance From Location to current location :{distance}{" "}
         </div>
-        {btn ? (
+        {btn === "Start Ride" ? (
           <button
-            className={classes.btn}
             onClick={() => {
-              rideSelect(id);
+              window.open(
+                `https://www.google.com/maps/dir/?api=1&origin=${start.lat},${start.lng}&destination=${end.lat},${end.lng}&travelmode=driving&dir_action=navigate`,
+                "_blank"
+              );
+              setBtn("End Ride");
             }}
+            className={classes.btn}
           >
             {btn}
           </button>
-        ) : null}
+        ) : btn === "Select" ? (
+          <>
+            <button
+              className={classes.btn}
+              onClick={() => {
+                rideSelect(id);
+              }}
+            >
+              {btn}
+            </button>
+          </>
+        ) : (
+          <button className={classes.btn} onClick={endRide}>
+            {btn}
+          </button>
+        )}
         <button
           className={classes.btn}
           style={{

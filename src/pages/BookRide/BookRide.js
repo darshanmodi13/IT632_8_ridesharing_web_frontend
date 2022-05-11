@@ -376,6 +376,9 @@ const DisplayDistance = ({
           <span className={classes.distance}>
             {(distance / 1000).toFixed(1)}km
           </span>
+          <span className={classes.distance}>
+            {Math.floor((distance / 1000) * 5)}&#8377;
+          </span>
         </div>
         <div className={classes["btn-container"]}>
           <button

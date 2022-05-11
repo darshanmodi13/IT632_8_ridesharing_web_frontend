@@ -19,7 +19,7 @@ const useStyles = makeStyles({
     }
 });
 
-const Dashboard = () => {
+const Dashboard = ({user}) => {
     const classes = useStyles();
     return(
         <>

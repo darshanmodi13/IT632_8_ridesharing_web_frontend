@@ -98,7 +98,7 @@ const FindRide = () => {
         longitude: start.lng,
       };
     });
-    socket.emit("join", {});
+
     socket.on("driver-selected", (data) => {
       if (data.status === "200") {
         let { id, user_id, status, ...driver } = data;
@@ -116,7 +116,13 @@ const FindRide = () => {
     let end = JSON.parse(query.get("end"));
     let id = authState.id;
     if (id) {
-      socket.emit("find-ride", { start, end, id });
+      socket.emit("join", { city: start.location.split(",")[0], id: id });
+      socket.emit("find-ride", {
+        start,
+        end,
+        id,
+        city: start.location.split(",")[0],
+      });
       socket.on("no-ride", (msg) => {
         setErr(msg);
       });

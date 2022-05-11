@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { makeStyles } from "@mui/styles";
 import { Map, Marker, Source, Layer } from "react-map-gl";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 //api
 import mapApi from "../../apis/mapApis";
@@ -10,6 +10,7 @@ import mapApi from "../../apis/mapApis";
 import Avatar from "../../assets/img/avatar.jpg";
 //io connection
 import { socket } from "../../utils/socket.connection";
+import { useGlobalContext } from "../../contexts/GlobalContext";
 //styles
 const useStyles = makeStyles({
   "map-container": {
@@ -123,6 +124,8 @@ const layerStyle = {
 const DriverDistance = () => {
   const [query] = useSearchParams();
   const classes = useStyles();
+  const { authState } = useGlobalContext();
+  const navigate = useNavigate();
   const [geojson, setGeojson] = useState({
     type: "Feature",
     geometry: {
@@ -167,9 +170,24 @@ const DriverDistance = () => {
       };
     });
     getDistance(start.lat, start.lng, end.lat, end.lng);
-    socket.emit("send-passenger-location", { start, end });
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  useEffect(() => {
+    let id = authState.id;
+    let start = JSON.parse(query.get("start"));
+    let end = JSON.parse(query.get("end"));
+    if (id) {
+      socket.emit("send-passenger-location", { start, end, id: id });
+    }
+    socket.on("ride-ended", (data) => {
+      socket.disconnect();
+      window.alert("Payment");
+      navigate("/");
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [authState.id]);
+
   const getDistance = async (start_lat, start_lng, end_lat, end_lng) => {
     await mapApi.getDistance(
       start_lng,
@@ -238,7 +256,6 @@ const DriverDistance = () => {
               Honda Shine
             </div>
           </div>
-          <div className={classes.otp}>OTP : 1234</div>
           <div className={classes["ride-details"]}>
             <div className={classes.from}>
               {" "}

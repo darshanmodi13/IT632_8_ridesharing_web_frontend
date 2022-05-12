@@ -18,6 +18,8 @@ import ViewProfile from "./pages/ViewProfile/ViewProfile";
 import Upload from "./pages/UploadDocs/Upload";
 import Account from "./pages/Account/Account";
 import UpdateProfile from "./pages/UpdateProfile/UpdateProfile";
+import AdminLogin from "./pages/Admin/AdminLogin";
+import Dashboard from "./pages/Admin/Dashboard";
 
 //routes
 import NotLoggedInRoutes from "./components/routes/NotLoggedInRoute";
@@ -33,6 +35,8 @@ function App() {
           <Route path="/find-ride" element={<FindRideMain />} exact />
           <Route path="/offer-ride" element={<OfferRide />} exact />
           <Route path="/account" element={<Account />} exact />
+          <Route path="/admin-login" element={<AdminLogin/>} />
+          <Route path="/admin-dashboard" element={<Dashboard/>}/>
           <Route
             path="/wait-for-driver"
             element={<DriverDistanceMain />}

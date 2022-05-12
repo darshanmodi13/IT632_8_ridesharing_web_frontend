@@ -114,9 +114,18 @@ const FindRide = () => {
   useEffect(() => {
     let start = JSON.parse(query.get("start"));
     let end = JSON.parse(query.get("end"));
+    let distance = JSON.parse(query.get("distance"));
+    let fare = Math.floor((distance / 1000) * 5);
     let id = authState.id;
     if (id) {
-      socket.emit("join", { city: start.location.split(",")[0], id: id });
+      socket.emit("join", {
+        city: start.location.split(",")[0],
+        id: id,
+        start,
+        end,
+        distance,
+        fare,
+      });
       socket.emit("find-ride", {
         start,
         end,

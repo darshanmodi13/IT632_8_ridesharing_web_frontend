@@ -177,12 +177,26 @@ const DriverDistance = () => {
     let id = authState.id;
     let start = JSON.parse(query.get("start"));
     let end = JSON.parse(query.get("end"));
+    let fare = null;
     if (id) {
       socket.emit("send-passenger-location", { start, end, id: id });
     }
-    socket.on("ride-ended", (data) => {
-      socket.disconnect();
-      window.alert("Payment");
+    socket.on("ride-ended", async (data) => {
+      console.log(data);
+      await mapApi.getDistance(
+        data.start.lng,
+        data.start.lat,
+        data.end.lng,
+        data.end.lat,
+        (res) => {
+          fare = Math.floor((res.routes[0].distance / 1000) * 5);
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
+      await socket.disconnect();
+      await window.alert("Amount Payable:" + fare);
       navigate("/");
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { makeStyles } from "@mui/styles";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import image from "../../assets/img/default_male.png";
 import CloseIcon from "@mui/icons-material/Close";
+import { useGlobalContext } from "../../contexts/GlobalContext";
+import userApi from "../../apis/user.api";
 
 const useStyles = makeStyles({
   updatecontainer: {
@@ -124,13 +126,19 @@ const useStyles = makeStyles({
 const Updateinput = () => {
   const classes = useStyles();
   const navigate = useNavigate();
+  const { authState } = useGlobalContext();
   const [input, setInput] = useState({
     name: "",
-    mobilenumber: "",
     email: "",
-    dateofbirth: "",
   });
   const [err, setErr] = useState("");
+
+  useEffect(() => {
+    if (authState.id) {
+      getUser();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [authState.id]);
 
   const changeInput = (e) => {
     setInput((oldval) => {
@@ -144,7 +152,31 @@ const Updateinput = () => {
   const closeErr = () => {
     setErr("");
   };
-
+  const getUser = async () => {
+    let id = authState.id;
+    await userApi.getUser(
+      id,
+      (res) => {
+        setInput({ name: res.name, email: res.email });
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+  };
+  const updateUser = async () => {
+    let id = authState.id;
+    await userApi.updateUser(
+      id,
+      input,
+      (res) => {
+        navigate("/view-profile");
+      },
+      (err) => {
+        console.log("Error Occured..");
+      }
+    );
+  };
   return (
     <>
       <div className={classes["updatecontainer"]}>
@@ -176,10 +208,6 @@ const Updateinput = () => {
 
         <div className={classes["profile_pic"]}>
           <img className={classes["i"]} src={image} alt="NULL" /> <br></br>
-          <div className={classes["upload"]}>
-            <input type="file" id="img" style={{ display: "none" }}></input>
-            <label htmlFor="img">Upload Profile Image</label>
-          </div>
         </div>
 
         <div className={["Inputcontainer"]}>
@@ -198,19 +226,6 @@ const Updateinput = () => {
         <div className={["Inputcontainer"]}>
           <input
             type="text"
-            pattern="[7-9]{1}[0-9]{9}"
-            title="Contact Number begin with 7-9"
-            className={classes["input"]}
-            placeholder="Contact Number"
-            value={input.mobilenumber}
-            name="mobilenumber"
-            onChange={changeInput}
-          />
-        </div>
-
-        <div className={["Inputcontainer"]}>
-          <input
-            type="text"
             pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
             title="Email begin with any letters,numbers followed by @ and domain name"
             className={classes["input"]}
@@ -221,24 +236,10 @@ const Updateinput = () => {
           />
         </div>
 
-        <div className={["Inputcontainer"]}>
-          <input
-            type="date"
-            title="Date of birth"
-            className={classes["input"]}
-            placeholder="DD/MM/YYYY"
-            value={input.dateofbirth}
-            name="dateofbirth"
-            onChange={changeInput}
-          />
-        </div>
-
         <div className={["btn-container"]}>
-          <div className={classes["Role"]}>Role</div>
-          <button className={classes.btn1}>Driver</button>
-          <button className={classes.btn2}>Passenger</button>
-          <button className={classes.btn3}>Both</button> <br></br>
-          <button className={classes.btn4}>Update Profile</button>
+          <button className={classes.btn4} onClick={updateUser}>
+            Update Profile
+          </button>
         </div>
       </div>
     </>

@@ -387,7 +387,7 @@ const DisplayDistance = ({
               navigate(
                 `/find-ride?start=${JSON.stringify(start)}&end=${JSON.stringify(
                   end
-                )}`
+                )}&distance=${JSON.stringify(distance)}`
               );
             }}
           >

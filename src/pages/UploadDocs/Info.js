@@ -166,22 +166,22 @@ const Info = () => {
       return;
     }
 
-    // setIsReadOnly(true);
-    // userApi.uploadDocs(
-    //   authState.id,
-    //   info,
-    //   img,
-    //   (res) => {
-    //     if (res) {
-    //       console.log(res);
-    //       navigate("/");
-    //     }
-    //   },
-    //   (err) => {
-    //     console.log(err);
-    //   }
-    // );
-    // setIsReadOnly(false);
+    setIsReadOnly(true);
+    userApi.uploadDocs(
+      authState.id,
+      info,
+      img,
+      (res) => {
+        if (res) {
+          console.log(res);
+          navigate("/");
+        }
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+    setIsReadOnly(false);
   };
 
   const closeErr = () => {

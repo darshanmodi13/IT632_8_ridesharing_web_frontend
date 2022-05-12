@@ -18,10 +18,13 @@ import ViewProfile from "./pages/ViewProfile/ViewProfile";
 import Upload from "./pages/UploadDocs/Upload";
 import Account from "./pages/Account/Account";
 import UpdateProfile from "./pages/UpdateProfile/UpdateProfile";
-
+import AdminLogin from "./pages/Admin/AdminLogin";
+import Dashboard from "./pages/Admin/Dashboard";
 //routes
 import NotLoggedInRoutes from "./components/routes/NotLoggedInRoute";
 import AuthRoutes from "./components/routes/AuthRoute";
+import DriverRoute from "./components/routes/DriverRoute";
+import AdminRoute from "./components/routes/AdminRoute";
 
 function App() {
   return (
@@ -31,8 +34,17 @@ function App() {
           <Route path="/" element={<Home />} exact />
           <Route path="/book-ride" element={<BookRideMain />} exact />
           <Route path="/find-ride" element={<FindRideMain />} exact />
-          <Route path="/offer-ride" element={<OfferRide />} exact />
+          <Route
+            path="/offer-ride"
+            element={
+              <DriverRoute>
+                <OfferRide />
+              </DriverRoute>
+            }
+            exact
+          />
           <Route path="/account" element={<Account />} exact />
+          <Route path="/admin-login" element={<AdminLogin />} />
           <Route
             path="/wait-for-driver"
             element={<DriverDistanceMain />}
@@ -82,6 +94,14 @@ function App() {
               </AuthRoutes>
             }
             exact
+          />
+          <Route
+            path="/admin"
+            element={
+              <AdminRoute>
+                <Dashboard />
+              </AdminRoute>
+            }
           />
           <Route
             path="*"

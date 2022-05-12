@@ -4,10 +4,11 @@ const authMethods = {
     const token = localStorage.getItem("token");
     const role = localStorage.getItem("role");
     const mobile = localStorage.getItem("mobile");
-    return { id, token, role, mobile };
+    const can_drive = localStorage.getItem("can_drive");
+    return { id, token, role, mobile, can_drive };
   },
 
-  setIdToken: function (id, token, role, mobile) {
+  setIdToken: function (id, token, role, mobile, can_drive) {
     let role_id = 1;
     if (role === "captain") {
       role_id = 2;
@@ -18,6 +19,7 @@ const authMethods = {
     localStorage.setItem("token", token);
     localStorage.setItem("role", role_id);
     localStorage.setItem("mobile", mobile);
+    localStorage.setItem("can_drive", can_drive);
   },
 
   clearStorage: function () {

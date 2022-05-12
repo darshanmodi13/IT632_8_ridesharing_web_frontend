@@ -5,6 +5,8 @@ const AuthInitialState = {
   id: null,
   token: null,
   role: null,
+  mobile: null,
+  can_drive: false,
 };
 
 const AuthReducer = (state, action) => {
@@ -27,7 +29,9 @@ const AuthReducer = (state, action) => {
     case actionTypes.SET_MOBILE: {
       return { ...state, mobile: action.payload };
     }
-
+    case actionTypes.SET_CAN_DRIVE: {
+      return { ...state, can_drive: action.payload };
+    }
     default:
       return state;
   }

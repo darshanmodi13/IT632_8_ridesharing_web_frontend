@@ -124,18 +124,12 @@ const Input = () => {
   const { authDispatch } = useGlobalContext();
   const navigate = useNavigate();
   const [input, setInput] = useState({
-    mobile_no: "",
+    name: "",
     password: "",
   });
   const [err, setErr] = useState("");
 
   const changeInput = (e) => {
-    if (e.target.name === "mobile_no") {
-      let num = Number(e.target.value);
-      if (Number.isNaN(num)) {
-        return;
-      }
-    }
     setInput((oldval) => {
       return {
         ...oldval,
@@ -144,14 +138,14 @@ const Input = () => {
     });
   };
   const submitForm = () => {
-    if (!input.mobile_no || input.mobile_no.length !== 10) {
+    if (!input.name) {
       setErr("Enter Valid Mobile Number");
       return;
     } else if (!input.password) {
       setErr("Enter Password");
       return;
     }
-    authApis.signin(
+    authApis.adminSignin(
       input,
       authDispatch,
       async (data) => {
@@ -163,10 +157,11 @@ const Input = () => {
           data.mobile_no,
           data.can_drive
         );
+        navigate("/admin");
       },
       (err = "") => {
-        console.log();
-        setErr(err.message);
+        console.log(err);
+        setErr(err);
       }
     );
   };
@@ -189,7 +184,7 @@ const Input = () => {
           <div className={classes["header-text"]}>Signin</div>
         </div>
 
-        <div className={classes.subheader}>Welcome Back!</div>
+        <div className={classes.subheader}>Signin</div>
         <div className={classes.subheader2}>Please enter your details.</div>
 
         {err ? (
@@ -207,13 +202,10 @@ const Input = () => {
         <div className={classes["input-container"]}>
           <input
             type="text"
-            pattern="[7-9]{1}[0-9]{9}"
-            title="Phone number with 7-9 and remaing 9 digit with 0-9"
             className={classes["input"]}
-            placeholder="Enter Mobile Number"
+            placeholder="Enter Name"
             value={input.mobile_no}
-            name="mobile_no"
-            maxLength="10"
+            name="name"
             onChange={changeInput}
           />
         </div>
@@ -228,17 +220,10 @@ const Input = () => {
           />
         </div>
 
-        <div className={classes["forgot-password"]}>
-          <Link to="/forgot-password">Forgot Password?</Link>
-        </div>
-
         <div className={classes["btn-container"]}>
           <button className={classes.btn} onClick={submitForm}>
             Sign In
           </button>
-        </div>
-        <div className={classes["register"]}>
-          Don't Have an account? <Link to="/register">Register here</Link>
         </div>
       </div>
     </>

@@ -22,11 +22,15 @@ const authApis = {
         type: actionTypes.SET_TOKEN,
         payload: res.data.data.user.token,
       });
+      dispatch({
+        type: actionTypes.SET_CAN_DRIVE,
+        payload: res.data.data.user.can_drive,
+      });
       onSucess(res.data.data.user);
       return;
     } catch (error) {
       console.log(error.response);
-      onError(error.response.data.error);
+      onError(error.response.data);
     }
   },
   signup: async (credentials, dispatch, onSucess, onError) => {
@@ -49,6 +53,32 @@ const authApis = {
     } catch (error) {
       console.log(error.response);
       onError(error.response.data.message);
+    }
+  },
+  adminSignin: async (credentials, dispatch, onSucess, onError) => {
+    try {
+      let res = await Axios().post("/api/auth/admin-login", { ...credentials });
+      dispatch({
+        type: actionTypes.SET_AUTHENTICATION,
+        payload: true,
+      });
+      dispatch({
+        type: actionTypes.SET_ID,
+        payload: 1,
+      });
+      dispatch({
+        type: actionTypes.SET_ROLE,
+        payload: 2,
+      });
+      dispatch({
+        type: actionTypes.SET_TOKEN,
+        payload: res.data.data.token,
+      });
+      onSucess(res.data.data);
+      return;
+    } catch (error) {
+      console.log(error.response);
+      onError(error.response.data.error);
     }
   },
 };

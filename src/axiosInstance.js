@@ -1,7 +1,7 @@
 import axios from "axios";
 import auth from "./utils/authMethods";
 
-const url = "https://se-backend-gid-8-2022.herokuapp.com";
+const url = "https://ride-share-backend.onrender.com";
 // const url = "http://localhost:8080";
 
 const axiosInstance = () => {

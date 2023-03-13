@@ -1,5 +1,8 @@
-import {io} from "socket.io-client"
+import { io } from "socket.io-client";
 
-const socket = io.connect("http://localhost:8081");
+const url = "https://ride-share-backend.onrender.com";
+// const url = "http://localhost:8080";
+
+const socket = io.connect(url);
 
 export { socket };
